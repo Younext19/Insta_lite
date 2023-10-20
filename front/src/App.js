@@ -4,7 +4,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <p>bing</p>
+        <p>random</p>
       </header>
     </div>
   );
