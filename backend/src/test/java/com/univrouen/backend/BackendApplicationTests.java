@@ -1,11 +1,13 @@
-package com.univrouen.back;
+package com.univrouen.backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BackApplicationTests {
+class BackendApplicationTests {
 
-
+	@Test
+	void contextLoads() {
+	}
 
 }
