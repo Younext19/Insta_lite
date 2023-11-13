@@ -10,9 +10,7 @@ ENV PATH /app/node_modules/.bin:$PATH
 # install app dependencies
 COPY package.json ./
 
-RUN npm install
-RUN npm react-scripts
-
+RUN npm install && npm react-scripts
 # add app
 COPY . ./
 
