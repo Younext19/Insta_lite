@@ -2,11 +2,14 @@ package com.univrouen.backend.controllers;
 
 
 import com.univrouen.backend.dto.AthentificationDTO;
+import com.univrouen.backend.dto.userConfigResponse.AuthenticationResponse;
 import com.univrouen.backend.dto.userConfigResponse.UserResponseBody;
+import com.univrouen.backend.entite.RefreshToken;
 import com.univrouen.backend.entite.UserDto;
 import com.univrouen.backend.exception.Error;
 import com.univrouen.backend.security.JwtService;
 import com.univrouen.backend.service.AuthService;
+import com.univrouen.backend.service.RefreshTokenService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
@@ -31,6 +34,8 @@ public class AuthController {
     private JwtService jwtService;
     @Autowired
     private AuthService authService;
+    @Autowired
+    private RefreshTokenService refreshTokenService;
 
     @PostMapping("/inscription")
     public ResponseEntity<UserResponseBody> signUp(@RequestBody UserDto userDto) {
@@ -58,19 +63,19 @@ public class AuthController {
         }
 
         if(authenticate.isAuthenticated()){
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.jwtService.generate(athentificationDTO.username()));
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.authService.generate(athentificationDTO.username()));
         }
         return null;
     }
 
-    @PostMapping(path = "deconnexion")
-    public void logout() {
-        this.jwtService.logout();
-    }
-
+//    @PostMapping(path = "deconnexion")
+//    public void logout() {
+//        this.jwtService.logout();
+//    }
+//
     @PostMapping(path = "refresh-token")
-    public @ResponseBody Map<String, String> refreshToken(@RequestBody Map<String, String> refreshTokenRequest) {
-        return this.jwtService.refreshToken(refreshTokenRequest);
+    public AuthenticationResponse refreshToken(@RequestBody Map<String, String> refreshTokenRequest) {
+        return this.refreshTokenService.refreshToken(refreshTokenRequest);
     }
 }
 

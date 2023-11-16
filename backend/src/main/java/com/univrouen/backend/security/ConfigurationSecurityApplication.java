@@ -50,9 +50,6 @@ public class ConfigurationSecurityApplication{
                                                 .requestMatchers(POST,"/activation").permitAll()
                                                 .requestMatchers(POST,"/connexion").permitAll()
                                                 .requestMatchers(POST,"/refresh-token").permitAll()
-                                                .requestMatchers(GET,"/users/**").permitAll()
-                                                .requestMatchers(DELETE,"/users/**").permitAll()
-
                                                 .requestMatchers(GET,"/users").permitAll()
 
                                                 .anyRequest().authenticated()

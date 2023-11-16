@@ -39,8 +39,7 @@ public class UserDto  implements UserDetails {
     @Enumerated(EnumType.STRING)
     private RoleType role;
 
-    @OneToMany(mappedBy = "userDto", cascade = CascadeType.REMOVE)
-    private List<Jwt> jwtList;
+
 
 
     public Collection<? extends GrantedAuthority> getAuthorities() {

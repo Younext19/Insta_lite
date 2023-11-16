@@ -4,9 +4,11 @@ import com.univrouen.backend.RoleType;
 import com.univrouen.backend.config.mapper.AuthMapper;
 import com.univrouen.backend.config.mapper.UserMapper;
 import com.univrouen.backend.dto.userConfigResponse.UserResponseBody;
+import com.univrouen.backend.entite.RefreshToken;
 import com.univrouen.backend.entite.UserDto;
 import com.univrouen.backend.exception.EmailAlreadyExistsException;
 import com.univrouen.backend.repository.AuthRepository;
+import com.univrouen.backend.security.JwtService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,22 +19,33 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.univrouen.backend.security.JwtService.REFRESH;
 
 
 @Slf4j
 @AllArgsConstructor
 @NoArgsConstructor
 @Service
-public class AuthService implements UserDetailsService {
+public class AuthService {
     @Autowired
     private UserMapper userMapper;
     @Autowired
     private AuthRepository authRepository;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private RefreshTokenService refreshTokenService;
 //    @Autowired
 //    private ValidationService validationService;
 
@@ -51,7 +64,6 @@ public class AuthService implements UserDetailsService {
         String mdpCrypte = this.passwordEncoder.encode(user.getPassword());
         user.setPassword(mdpCrypte);
         user.setRole(RoleType.ROLE_UTILISATEUR);
-
         UserResponseBody userSaved = userMapper.toUserResponseBody(this.authRepository.save(user));
         return userSaved;
     }
@@ -69,9 +81,15 @@ public class AuthService implements UserDetailsService {
 
     //chercher un utilisateur dans la bse de données en fonction de son email
     //il recupere toutes les infos et il compare des mdps car ils sont cryptés
-    @Override
-    public UserDto loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.authRepository.findByMail(username).orElseThrow(() -> new UsernameNotFoundException("Utilisateur inconnu"));
 
+
+
+    public Map<String, String> generate(String username) {
+        UserDto userDto = (UserDto) userService.loadUserByUsername(username);
+        RefreshToken refreshToken =  refreshTokenService.createRefreshToken(userDto.getId());
+        Map<String,String> jwtAndRefreshValue = new HashMap<>(jwtService.generateJwtByUser(userDto));
+        jwtAndRefreshValue.put("refresh",refreshToken.getToken());
+        return jwtAndRefreshValue;
     }
+
 }
