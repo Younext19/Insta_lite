@@ -1,4 +1,4 @@
-package com.univrouen.backend.dto.userConfigResponse;
+package com.univrouen.backend.dto.ResponseConfig;
 
 
 import lombok.AllArgsConstructor;

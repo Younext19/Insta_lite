@@ -1,18 +1,14 @@
 package com.univrouen.backend.controllers;
 
 
-import com.univrouen.backend.dto.userConfigResponse.UserResponseBody;
-import com.univrouen.backend.entite.UserDto;
+import com.univrouen.backend.dto.ResponseConfig.UserResponseBody;
 import com.univrouen.backend.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
 import java.util.List;
 
 @AllArgsConstructor

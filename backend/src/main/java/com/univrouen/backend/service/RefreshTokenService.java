@@ -1,6 +1,7 @@
 package com.univrouen.backend.service;
 
-import com.univrouen.backend.dto.userConfigResponse.AuthenticationResponse;
+import com.univrouen.backend.dto.RequestConfig.RefreshTokenRequest;
+import com.univrouen.backend.dto.ResponseConfig.RefreshTokenResponse;
 import com.univrouen.backend.entite.RefreshToken;
 import com.univrouen.backend.entite.UserDto;
 import com.univrouen.backend.repository.RefreshTokenRepository;
@@ -43,23 +44,22 @@ public class RefreshTokenService {
         return this.refreshTokenRepository.save(refreshToken);
     }
 
-    public AuthenticationResponse refreshToken(Map<String, String> refreshTokenRequest){
-        RefreshToken refreshToken = refreshTokenRepository.findByToken(refreshTokenRequest.get("refresh")).orElseThrow(
+    public RefreshTokenResponse refreshToken(RefreshTokenRequest refreshTokenRequest){
+        RefreshToken refreshToken = refreshTokenRepository.findByToken(refreshTokenRequest.getRefresh()).orElseThrow(
                 () -> new RuntimeException("le refresh token n'existe pas"));
         if(refreshToken ==  null){
             throw new RuntimeException("le token est null");
         }
-
         Instant nowInstant = Instant.now();
         if(refreshToken.getExpiryDate().isBefore(nowInstant)){
             refreshTokenRepository.delete(refreshToken);
             throw new RuntimeException("le refresh token est expiré");
         }
-        Map<String, String> generatedMap =  jwtService.generate(refreshToken.getUser().getMail());
+        String newToken =  jwtService.generate(refreshToken.getUser().getMail());
         return
-                AuthenticationResponse.builder()
+                RefreshTokenResponse.builder()
                         .refreshToken(refreshToken.getToken())
-                        .accessToken(generatedMap.get(JwtService.BEARER))
+                        .accessToken(newToken)
                         .build();
     }
 }

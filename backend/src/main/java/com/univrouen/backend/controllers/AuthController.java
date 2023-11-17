@@ -2,9 +2,11 @@ package com.univrouen.backend.controllers;
 
 
 import com.univrouen.backend.dto.AthentificationDTO;
-import com.univrouen.backend.dto.userConfigResponse.AuthenticationResponse;
-import com.univrouen.backend.dto.userConfigResponse.UserResponseBody;
-import com.univrouen.backend.entite.RefreshToken;
+import com.univrouen.backend.dto.RequestConfig.RefreshTokenRequest;
+import com.univrouen.backend.dto.RequestConfig.RegisterRequest;
+import com.univrouen.backend.dto.ResponseConfig.AuthenticationResponse;
+import com.univrouen.backend.dto.ResponseConfig.RefreshTokenResponse;
+import com.univrouen.backend.dto.ResponseConfig.UserResponseBody;
 import com.univrouen.backend.entite.UserDto;
 import com.univrouen.backend.exception.Error;
 import com.univrouen.backend.security.JwtService;
@@ -12,10 +14,8 @@ import com.univrouen.backend.service.AuthService;
 import com.univrouen.backend.service.RefreshTokenService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -38,9 +38,8 @@ public class AuthController {
     private RefreshTokenService refreshTokenService;
 
     @PostMapping("/inscription")
-    public ResponseEntity<UserResponseBody> signUp(@RequestBody UserDto userDto) {
-        UserResponseBody newUser = this.authService.signUp(userDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+    public ResponseEntity<UserResponseBody> signUp(@RequestBody RegisterRequest userDtoRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.signUp(userDtoRequest));
     }
 
 //    @PostMapping("/activation")
@@ -63,7 +62,7 @@ public class AuthController {
         }
 
         if(authenticate.isAuthenticated()){
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.authService.generate(athentificationDTO.username()));
+            return ResponseEntity.ok(this.authService.generate(athentificationDTO.username()));
         }
         return null;
     }
@@ -74,8 +73,8 @@ public class AuthController {
 //    }
 //
     @PostMapping(path = "refresh-token")
-    public AuthenticationResponse refreshToken(@RequestBody Map<String, String> refreshTokenRequest) {
-        return this.refreshTokenService.refreshToken(refreshTokenRequest);
+    public ResponseEntity<RefreshTokenResponse> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        return ResponseEntity.ok(this.refreshTokenService.refreshToken(refreshTokenRequest));
     }
 }
 

@@ -91,9 +91,14 @@
 			<artifactId>mapstruct</artifactId>
 			<version>${org.mapstruct.version}</version> <!-- Assurez-vous de spécifier la dernière version -->
 		</dependency>
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>9.1.0</version>
+        </dependency>
 
 
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<plugins>

@@ -2,10 +2,7 @@ package com.univrouen.backend.entite;
 
 import com.univrouen.backend.RoleType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor(force = true)
@@ -33,7 +30,6 @@ public class UserDto  implements UserDetails {
     @Column(name="full_name")
     private String fullname;
     private String mail;
-    private boolean actif = false;
     @Column(name="img_url")
     private String imgUrl;
     @Enumerated(EnumType.STRING)

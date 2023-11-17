@@ -2,7 +2,7 @@ package com.univrouen.backend.service;
 
 
 import com.univrouen.backend.config.mapper.UserMapper;
-import com.univrouen.backend.dto.userConfigResponse.UserResponseBody;
+import com.univrouen.backend.dto.ResponseConfig.UserResponseBody;
 import com.univrouen.backend.entite.UserDto;
 import com.univrouen.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;

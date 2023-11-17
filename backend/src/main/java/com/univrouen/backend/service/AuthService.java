@@ -1,9 +1,10 @@
 package com.univrouen.backend.service;
 import com.univrouen.backend.RoleType;
 
-import com.univrouen.backend.config.mapper.AuthMapper;
 import com.univrouen.backend.config.mapper.UserMapper;
-import com.univrouen.backend.dto.userConfigResponse.UserResponseBody;
+import com.univrouen.backend.dto.RequestConfig.RegisterRequest;
+import com.univrouen.backend.dto.ResponseConfig.AuthenticationResponse;
+import com.univrouen.backend.dto.ResponseConfig.UserResponseBody;
 import com.univrouen.backend.entite.RefreshToken;
 import com.univrouen.backend.entite.UserDto;
 import com.univrouen.backend.exception.EmailAlreadyExistsException;
@@ -13,17 +14,10 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
-
-import static com.univrouen.backend.security.JwtService.REFRESH;
 
 
 @Slf4j
@@ -49,18 +43,21 @@ public class AuthService {
 //    @Autowired
 //    private ValidationService validationService;
 
-    public UserResponseBody signUp(UserDto user){
-        if(user.getMail().indexOf("@") == -1 ){
+    public UserResponseBody signUp(RegisterRequest userDtoRequest){
+
+        if(userDtoRequest.getMail().indexOf("@") == -1 ){
             throw new RuntimeException("Votre mail est invalide");
         }
-        if(!user.getMail().contains(".")){
+        if(!userDtoRequest.getMail().contains(".")){
             throw new RuntimeException("Votre mail est invalide");
         }
 
-        Optional<UserDto> optionalUtilisateur = this.authRepository.findByMail(user.getMail());
+        Optional<UserDto> optionalUtilisateur = this.authRepository.findByMail(userDtoRequest.getMail());
         if(optionalUtilisateur.isPresent()){
-            throw new EmailAlreadyExistsException("A user with the email '" + user.getMail() + "' already exists.");
+            throw new EmailAlreadyExistsException("A user with the email '" + userDtoRequest.getMail() + "' already exists.");
         }
+        UserDto user =  userMapper.toUserEntity(userDtoRequest);
+
         String mdpCrypte = this.passwordEncoder.encode(user.getPassword());
         user.setPassword(mdpCrypte);
         user.setRole(RoleType.ROLE_UTILISATEUR);
@@ -84,12 +81,19 @@ public class AuthService {
 
 
 
-    public Map<String, String> generate(String username) {
+    public AuthenticationResponse generate(String username) {
         UserDto userDto = (UserDto) userService.loadUserByUsername(username);
         RefreshToken refreshToken =  refreshTokenService.createRefreshToken(userDto.getId());
-        Map<String,String> jwtAndRefreshValue = new HashMap<>(jwtService.generateJwtByUser(userDto));
-        jwtAndRefreshValue.put("refresh",refreshToken.getToken());
-        return jwtAndRefreshValue;
+        String jwt = jwtService.generateJwtByUser(userDto);
+        String refreshTokeValue = refreshToken.getToken();
+        return
+                AuthenticationResponse.builder()
+                        .id(userDto.getId())
+                        .mail(username)
+                        .role(userDto.getRole())
+                        .accessToken(jwt)
+                        .refreshToken(refreshTokeValue)
+                        .build();
     }
 
 }
