@@ -14,6 +14,7 @@ public class AuthenticationResponse {
     private int id;
     private String mail;
     private RoleType role;
+    private boolean hasPrivileges;
     @JsonProperty("access_token")
     private String accessToken;
     @JsonProperty("refresh_token")

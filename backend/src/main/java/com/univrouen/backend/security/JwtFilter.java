@@ -17,7 +17,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 @Slf4j
 
-
 @Service
 public class JwtFilter extends OncePerRequestFilter {
     private UserService userService;
@@ -30,9 +29,6 @@ public class JwtFilter extends OncePerRequestFilter {
         this.userService = authService;
         this.jwtService = jwtService;
     }
-
-
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = null, username = null,authorization = request.getHeader("Authorization");

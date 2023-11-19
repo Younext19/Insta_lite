@@ -22,5 +22,7 @@ public class RegisterRequest {
     private String password;
     private String imgUrl;
 
+    private boolean hasPrivileges;
+
 
 }

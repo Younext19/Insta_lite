@@ -51,7 +51,6 @@ public class ConfigurationSecurityApplication{
                                                 .requestMatchers(POST,"/connexion").permitAll()
                                                 .requestMatchers(POST,"/refresh-token").permitAll()
                                                 .requestMatchers(GET,"/users").permitAll()
-
                                                 .anyRequest().authenticated()
                         )
                         .sessionManagement(httpSecuritySessionManagementConfigurer ->

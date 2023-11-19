@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -94,6 +95,10 @@ public class AuthService {
                         .accessToken(jwt)
                         .refreshToken(refreshTokeValue)
                         .build();
+    }
+
+    public void logout(){
+        UserDto userDto = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 }

@@ -15,4 +15,5 @@ public class UserResponseBody {
     private String mail;
     private String fullname;
     private String role;
+    private boolean hasPrivileges;
 }
