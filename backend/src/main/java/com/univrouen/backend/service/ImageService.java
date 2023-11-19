@@ -21,7 +21,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.File;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -66,8 +68,8 @@ public class ImageService {
                 .id(imageEntity.getId())
                 .title(imageEntity.getTitle())
                 .isPrivate(imageEntity.isPrivate())
-                .fullname(userDto.getFullname())
-                .mail(userDto.getMail())
+                .fullnameUser(userDto.getFullname())
+                .pseudoUser(userDto.getPseudo())
                 .build();
 
         }
@@ -77,5 +79,22 @@ public class ImageService {
         String extension = StringUtils.getFilenameExtension(name);
         newName = System.currentTimeMillis() + "." + extension;
         return  newName;
+    }
+
+    public List<ImageResponse> getAllImages() {
+        List<ImageEntity> images = this.imageRepository.findAll();
+        if(SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
+            UserDto userDto = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if(userDto.isHasPrivileges()){
+                return imageMapper.toImageResponseList(images);
+            } else {
+              return  imageMapper.toImageResponseList(images.stream()
+                        .filter(imageEntity -> !imageEntity.isPrivate()).toList());
+            }
+        }
+        else {
+            return  imageMapper.toImageResponseList(images.stream()
+                    .filter(imageEntity -> !imageEntity.isPrivate()).toList());
+        }
     }
 }
