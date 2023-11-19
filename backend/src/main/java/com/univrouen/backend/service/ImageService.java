@@ -2,17 +2,19 @@ package com.univrouen.backend.service;
 
 
 import com.univrouen.backend.config.mapper.ImageMapper;
-import com.univrouen.backend.dto.RequestConfig.ImageRequest;
 import com.univrouen.backend.dto.ResponseConfig.ImageResponse;
 import com.univrouen.backend.entite.ImageEntity;
 import com.univrouen.backend.entite.UserDto;
 import com.univrouen.backend.repository.ImageRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.security.core.Authentication;
 
 import java.awt.*;
 import java.io.IOException;
@@ -26,6 +28,7 @@ import java.util.Date;
 import java.util.List;
 
 
+@Slf4j
 @AllArgsConstructor
 @Service
 public class ImageService {
@@ -49,6 +52,7 @@ public class ImageService {
 
     public ImageResponse uploadImage(MultipartFile image, String title, boolean isPrivate) throws IOException {
         UserDto userDto = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         if(imageRepository.findImageByTitle(title).isPresent()) {
             throw new RuntimeException("image deja existe dans la base de données");
         }
@@ -82,9 +86,11 @@ public class ImageService {
     }
 
     public List<ImageResponse> getAllImages() {
+
         List<ImageEntity> images = this.imageRepository.findAll();
-        if(SecurityContextHolder.getContext().getAuthentication().isAuthenticated()){
-            UserDto userDto = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(!(authentication instanceof AnonymousAuthenticationToken)){
+            UserDto userDto = (UserDto) authentication.getPrincipal();
             if(userDto.isHasPrivileges()){
                 return imageMapper.toImageResponseList(images);
             } else {
