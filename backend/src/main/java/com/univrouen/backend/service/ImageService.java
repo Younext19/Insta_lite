@@ -73,9 +73,9 @@ public class ImageService {
         }
 
     private String generateNameFile(String name){
+        String newName;
         String extension = StringUtils.getFilenameExtension(name);
-        StringUtils.delete(name,extension);
-        name = name  + System.currentTimeMillis() + "." + extension;
-        return  name;
+        newName = System.currentTimeMillis() + "." + extension;
+        return  newName;
     }
 }
