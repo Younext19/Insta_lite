@@ -4,9 +4,6 @@
   background-color: #002e4c;
   color: white;
   position: fixed;
-  border-top-right-radius: 8px;
-  border-bottom-right-radius: 8px;
-  box-shadow: 1px 2px 9px #001829;
 }
 
 .toggle-btn {

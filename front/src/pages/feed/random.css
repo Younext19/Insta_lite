@@ -36,38 +36,3 @@
 .like-btn.liked {
   color: #ed4956;
 }
-
-.post-caption {
-  padding: 8px;
-}
-
-.post-comments {
-  padding: 8px;
-}
-
-.comment {
-  margin-bottom: 4px;
-}
-
-.comment-form {
-  display: flex;
-  align-items: center;
-  padding: 8px;
-}
-
-.comment-form input {
-  flex: 1;
-  margin-right: 8px;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.comment-form button {
-  cursor: pointer;
-  padding: 8px;
-  border: none;
-  background-color: #0095f6;
-  color: white;
-  border-radius: 4px;
-}

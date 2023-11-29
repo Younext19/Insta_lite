@@ -18,20 +18,10 @@
   border-style: groove;
 }
 
-.formInputOnWhite {
-  width: 300px;
-  height: 30px;
-  font-size: 20px;
-  padding: 10px;
-  border-top-left-radius: 8px;
-  border-bottom-left-radius: 8px;
-  border-style: none;
-  outline: none;
-}
 .formInput {
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
-  width: 300px;
+  flex: 1;
   height: 30px;
   font-size: 20px;
   padding: 10px;
@@ -56,5 +46,13 @@
   border-width: 0.5px;
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
+  cursor: pointer;
+}
+
+.publish-button {
+  font-size: 22px;
+  margin-right: 8px;
+  color: #0095f6;
+  font-weight: bold;
   cursor: pointer;
 }
