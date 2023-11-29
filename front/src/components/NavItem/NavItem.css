@@ -15,3 +15,9 @@
   color: white;
   border-radius: 8px;
 }
+
+.navItem.selected {
+  background-color: #183c56;
+  color: white;
+  border-radius: 8px;
+}

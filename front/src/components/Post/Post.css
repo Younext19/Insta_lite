@@ -1,19 +1,7 @@
-.post-content {
-  display: flex;
-  width: 80%;
-  height: 100%;
-  position: absolute;
-  right: 0;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  overflow-x: scroll;
-}
-
 .post-header {
   display: flex;
   align-items: center;
-  padding: 8px;
+  justify-content: space-between;
 }
 
 .user-avatar {
@@ -27,44 +15,14 @@
   font-weight: bold;
 }
 
-.post-image {
-  width: 400px;
-  max-height: 600px;
-  object-fit: cover;
-}
-
 .post-actions {
   display: flex;
   align-items: center;
   padding: 8px;
 }
 
-.like-btn {
-  cursor: pointer;
-  color: #262626;
-  margin-right: 8px;
-}
-
-.like-btn.liked {
-  color: #ed4956;
-}
-
-.post-caption {
-  padding: 8px;
-}
-
-.post-comments {
-  padding: 8px;
-}
-
 .comment {
   margin-bottom: 4px;
-}
-
-.comment-form {
-  display: flex;
-  align-items: center;
-  padding: 8px;
 }
 
 .comment-form input {
@@ -85,8 +43,66 @@
 }
 
 .post {
-  margin: 16px 0;
-  width: 100%;
   max-width: 600px;
-  height: 100%;
+  top: 0;
+}
+.img-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-height: 500px;
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+.post-image {
+  object-fit: cover;
+}
+
+.user-profile-header {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+
+.settingsIcon {
+  cursor: pointer;
+  margin-left: 8px;
+}
+.totalLikes {
+  margin-left: 8px;
+}
+
+.like-button {
+  cursor: pointer;
+  margin-right: 8px;
+  text-decoration: none;
+  color: red;
+}
+
+.comment-content {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  margin: 8px;
+}
+
+.comment {
+  margin: 8px;
+  max-width: max-content;
+}
+.existing-comments {
+  overflow-y: auto;
+  max-height: 350px;
+  overflow-x: hidden;
+}
+
+.user-profile-header {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+
+.private-section {
+  padding-left: 8px;
 }

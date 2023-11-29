@@ -1,0 +1,24 @@
+.editInfoContainer {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+}
+
+.editTitle {
+  font-size: 20px;
+  font-weight: bold;
+  color: #000000;
+}
+
+.titleEdit {
+  font-size: 20px;
+  font-weight: bold;
+
+  color: #434343;
+}
+
+.buttonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

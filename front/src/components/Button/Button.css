@@ -9,6 +9,10 @@
   font-size: 16px;
   border-radius: 8px;
   cursor: pointer;
+  font-weight: bold;
+}
+.getStartedButton:hover {
+  background-color: #222e50;
 }
 
 .submitButton {
@@ -64,4 +68,11 @@
 .errorMessage {
   font-family: "Bad Script", cursive;
   font-size: 20px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }

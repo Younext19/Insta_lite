@@ -5,19 +5,16 @@ import instaLogo from "../../assets/instagram.png";
 import "./Sidebar.css";
 import NavItem from "../NavItem/NavItem";
 
-const Sidebar = ({ isLogged }) => {
+const AdminSideBar = ({ isLogged }) => {
   return (
     <div className="sidebar">
       <nav>
         <ul>
           <li>
-            <NavItem title="Accueil" link="/home" />
+            <NavItem title="Gestion des utilisateurs" link="/users" />
           </li>
           <li>
-            <NavItem title="Feed" link="/feed" />
-          </li>
-          <li>
-            <NavItem title="Profile" link={isLogged ? "/profile" : "/login"} />
+            <NavItem title="Gestion des images" link="/images" />
           </li>
           {isLogged ? (
             <li className="bottomContent">
@@ -34,4 +31,4 @@ const Sidebar = ({ isLogged }) => {
   );
 };
 
-export default Sidebar;
+export default AdminSideBar;

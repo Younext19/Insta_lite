@@ -10,6 +10,9 @@ export default function FormInput({
   onImgPress,
   imgStyle,
   isValid,
+  withImg = true,
+  withButton = false,
+  onPublishClick,
 }) {
   return (
     <>
@@ -22,7 +25,15 @@ export default function FormInput({
           onChange={onChange}
           className={inputStyle}
         />
-        <img src={src} className={imgStyle} onClick={onImgPress} alt="icon" />
+        {withImg ? (
+          <img src={src} className={imgStyle} onClick={onImgPress} alt="icon" />
+        ) : null}
+
+        {withButton ? (
+          <a className="publish-button" onClick={onPublishClick}>
+            Publier
+          </a>
+        ) : null}
       </div>
     </>
   );
