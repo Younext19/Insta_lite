@@ -10,10 +10,10 @@ import java.util.Date;
 @Builder
 public class ImageResponse {
 
-    private long id;
     private Date creationDate;
     private String title;
     private boolean isPrivate;
     private String fullnameUser;
     private String pseudoUser;
+    private String urlImage;
 }

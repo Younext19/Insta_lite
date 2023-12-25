@@ -20,10 +20,8 @@ public class ImageEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String title;
-    private String imgUrl;
     private boolean isPrivate;
     private Date creationDate;
-
 
     public boolean isPrivate(){
         return this.isPrivate;

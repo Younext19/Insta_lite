@@ -1,6 +1,7 @@
 package com.univrouen.backend.security;
 
 
+import com.univrouen.backend.config.CONSTANT.Constant;
 import com.univrouen.backend.service.AuthService;
 import com.univrouen.backend.service.UserService;
 import jakarta.servlet.FilterChain;
@@ -31,15 +32,13 @@ public class JwtFilter extends OncePerRequestFilter {
     }
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = null, username = null,authorization = request.getHeader("Authorization");
+        String token = null, username = null,authorization = request.getHeader(Constant.AUTHORIZATION);
         Boolean isTokenExpired = true;
-        if(authorization != null && authorization.startsWith("Bearer")){
+        if(authorization != null && authorization.startsWith(Constant.BEARER)){
             token = authorization.substring(7);
             isTokenExpired = jwtService.isTokenExpired(token);
             username = jwtService.extractUsername(token);
         }
-
-
         //si le username !=null et que aucune authentification n'est en cours
         if(isTokenExpired == false && username != null
                 && SecurityContextHolder.getContext().getAuthentication() ==  null){

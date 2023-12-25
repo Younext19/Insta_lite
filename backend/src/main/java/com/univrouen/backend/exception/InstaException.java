@@ -1,12 +1,12 @@
 package com.univrouen.backend.exception;
 
-public class EmailAlreadyExistsException extends RuntimeException {
+public class InstaException extends RuntimeException {
 
-    public EmailAlreadyExistsException(){
+    public InstaException(){
         super("Email already exists on Bdd !!");
     }
 
-    public EmailAlreadyExistsException(String message){
+    public InstaException(String message){
         super(message);
     }
 

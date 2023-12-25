@@ -51,8 +51,10 @@ public class ConfigurationSecurityApplication{
                                                 .requestMatchers(POST,"/connexion").permitAll()
                                                 .requestMatchers(POST,"/refresh-token").permitAll()
                                                 .requestMatchers(GET,"/users").permitAll()
+                                                .requestMatchers(GET,"/users/**").permitAll()
                                                 .requestMatchers(GET,"/images").permitAll()
-                                                .requestMatchers(POST,"/images/**").hasAuthority(RoleType.ROLE_ADMINISTRATEUR.name())
+                                                .requestMatchers(POST,"/images/**").permitAll()
+                                                .requestMatchers(PATCH,"images/update/**").permitAll()
                                                 .anyRequest().authenticated()
                         )
                         .sessionManagement(httpSecuritySessionManagementConfigurer ->

@@ -35,6 +35,14 @@ public class ImageController {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.imageService.uploadImage(image, title,isPrivate));
     }
 
+    @PatchMapping ("/update/{id}")
+    public ResponseEntity<ImageResponse> updateImage(@PathVariable Long id, @RequestParam ("title") String title,
+                                                     @RequestParam ("isPrivate") boolean isPrivate,
+                                                     @RequestParam("image") MultipartFile image) throws IOException {
+        return ResponseEntity.status(HttpStatus.OK).body(this.imageService.updateImage(id,title,isPrivate,image));
+
+    }
+
 
 
 

@@ -1,6 +1,6 @@
 package com.univrouen.backend.exception.handler;
 
-import com.univrouen.backend.exception.EmailAlreadyExistsException;
+import com.univrouen.backend.exception.InstaException;
 import org.springframework.http.HttpStatus;
 import com.univrouen.backend.exception.Error;
 
@@ -13,9 +13,9 @@ public class GlobalExceptionHandler {
 
 
 
-    @ExceptionHandler(EmailAlreadyExistsException.class)
+    @ExceptionHandler(InstaException.class)
     public ResponseEntity<Error> handleException(
-            EmailAlreadyExistsException e) {
+            InstaException e) {
 
         Error error = Error.builder().message(e.getMessage()).build();
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);

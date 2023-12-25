@@ -7,7 +7,7 @@ import com.univrouen.backend.dto.ResponseConfig.AuthenticationResponse;
 import com.univrouen.backend.dto.ResponseConfig.UserResponseBody;
 import com.univrouen.backend.entite.RefreshToken;
 import com.univrouen.backend.entite.UserDto;
-import com.univrouen.backend.exception.EmailAlreadyExistsException;
+import com.univrouen.backend.exception.InstaException;
 import com.univrouen.backend.repository.AuthRepository;
 import com.univrouen.backend.security.JwtService;
 import lombok.AllArgsConstructor;
@@ -55,7 +55,7 @@ public class AuthService {
 
         Optional<UserDto> optionalUtilisateur = this.authRepository.findByMail(userDtoRequest.getMail());
         if(optionalUtilisateur.isPresent()){
-            throw new EmailAlreadyExistsException("A user with the email '" + userDtoRequest.getMail() + "' already exists.");
+            throw new InstaException("A user with the email '" + userDtoRequest.getMail() + "' already exists.");
         }
         UserDto user =  userMapper.toUserEntity(userDtoRequest);
 

@@ -7,7 +7,6 @@ import org.mapstruct.Mapper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListResourceBundle;
 
 @Mapper(componentModel = "spring")
 public abstract class ImageMapper {
@@ -20,7 +19,6 @@ public abstract class ImageMapper {
             imageResponses.add(ImageResponse.builder()
                     .pseudoUser(img.getUser().getPseudo())
                     .fullnameUser(img.getUser().getFullname())
-                    .id(img.getId())
                     .creationDate(img.getCreationDate())
                     .title(img.getTitle())
                     .isPrivate(img.isPrivate())
