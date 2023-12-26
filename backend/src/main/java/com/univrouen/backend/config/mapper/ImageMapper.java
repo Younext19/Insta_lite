@@ -13,6 +13,17 @@ public abstract class ImageMapper {
 
     public abstract ImageEntity toImageEntity(ImageRequest image);
 
+    public  ImageResponse toImageResponse(ImageEntity image){
+        return ImageResponse.builder()
+                .pseudoUser(image.getUser().getPseudo())
+                .fullnameUser(image.getUser().getFullname())
+                .creationDate(image.getCreationDate())
+                .title(image.getTitle())
+                .isPrivate(image.isPrivate())
+                .name(image.getName())
+                .build();
+    }
+
     public  List<ImageResponse> toImageResponseList(List<ImageEntity> imageEntities) {
         List<ImageResponse> imageResponses = new ArrayList<>();
         for (ImageEntity img : imageEntities) {
@@ -22,6 +33,7 @@ public abstract class ImageMapper {
                     .creationDate(img.getCreationDate())
                     .title(img.getTitle())
                     .isPrivate(img.isPrivate())
+                    .name(img.getName())
                     .build());
         }
         return imageResponses;

@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
 @Builder
 @Getter
@@ -34,12 +35,11 @@ public class UserDto  implements UserDetails {
     @Enumerated(EnumType.STRING)
     private RoleType role;
     private boolean hasPrivileges;
-
-
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<RefreshToken> refreshTokens;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(this.role.name()));
+        return Collections.singletonList(new SimpleGrantedAuthority(this.role.toString()));
     }
     public String getPassword() {
         return this.password;

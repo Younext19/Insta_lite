@@ -5,6 +5,7 @@ import com.univrouen.backend.RoleType;
 import com.univrouen.backend.config.CONSTANT.Constant;
 import com.univrouen.backend.config.mapper.ImageMapper;
 import com.univrouen.backend.dto.ResponseConfig.ImageResponse;
+import com.univrouen.backend.dto.ResponseConfig.UserResponseBody;
 import com.univrouen.backend.entite.ImageEntity;
 import com.univrouen.backend.entite.UserDto;
 import com.univrouen.backend.exception.InstaException;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,7 +32,6 @@ import java.util.UUID;
 
 
 @Slf4j
-
 @Service
 public class ImageService {
 
@@ -61,13 +62,7 @@ public class ImageService {
 
     public ImageResponse uploadImage(MultipartFile image, String title, boolean isPrivate) throws IOException {
         UserDto userDto = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-/*        if(imageRepository.findImageByTitle(title).isPresent()) {
-            throw new RuntimeException("image deja existe dans la base de données");
-        }*/
-
         String extractName = image.getOriginalFilename();
-
         String extension = StringUtils.getFilenameExtension(extractName);
 
         if(!Constant.EXTENSIONS.contains(extension)){
@@ -79,6 +74,7 @@ public class ImageService {
                 .title(title)
                 .isPrivate(isPrivate)
                 .user(userDto)
+                .name(this.host+fileName)
                 .creationDate(date)
                 .build();
         Path targetLocation = this.fileStorageLocation.resolve(fileName);
@@ -90,7 +86,7 @@ public class ImageService {
                 .fullnameUser(userDto.getFullname())
                 .pseudoUser(userDto.getPseudo())
                 .creationDate(date)
-                .urlImage(this.host+fileName)
+                .name(this.host+fileName)
                 .build();
 
         }
@@ -165,4 +161,35 @@ public class ImageService {
 
         this.host = "http://" + address + ":" + port + "/images/";
     }
-}
+
+    public ImageResponse getImageById(int id) {
+        ImageEntity image = this.imageRepository.findById((id)).orElseThrow(()->
+                new UsernameNotFoundException("Image with id  =  " + id + "does not exist")
+
+        );
+        return imageMapper.toImageResponse(image);
+    }
+
+    public void deleteById(int id) {
+        ImageEntity imageEntity = imageRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Image not found with this id: " + id));
+
+        UserDto userDto = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(imageEntity.getUser().getMail().equals(userDto.getMail())){
+            deleteImageFromFolder(imageEntity);
+            imageRepository.delete(imageEntity);
+        }else{
+            throw new InstaException("You are not allowed to update this image.");
+        }
+    }
+
+    private void deleteImageFromFolder(ImageEntity imageEntity){
+        Path imagePath = this.fileStorageLocation.resolve(imageEntity.getName());
+        try{
+            Files.delete(imagePath);
+        }catch(IOException exception){
+            throw new InstaException("Could not delete the image");
+        }
+    }
+
+    }

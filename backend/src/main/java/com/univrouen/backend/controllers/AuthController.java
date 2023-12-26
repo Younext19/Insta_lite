@@ -42,11 +42,6 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.signUp(userDtoRequest));
     }
 
-//    @PostMapping("/activation")
-//    public void validation(@RequestBody Map<String,String> activation) {
-//
-//        this.authService.activation(activation);
-//    }
     @PostMapping("/connexion")
     public ResponseEntity connexion(@RequestBody AthentificationDTO athentificationDTO) {
         Authentication authenticate = null;

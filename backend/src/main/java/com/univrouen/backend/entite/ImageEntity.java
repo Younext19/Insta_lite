@@ -22,7 +22,7 @@ public class ImageEntity {
     private String title;
     private boolean isPrivate;
     private Date creationDate;
-
+    private String name;
     public boolean isPrivate(){
         return this.isPrivate;
     }

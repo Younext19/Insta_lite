@@ -41,8 +41,7 @@ public class AuthService {
 
     @Autowired
     private RefreshTokenService refreshTokenService;
-//    @Autowired
-//    private ValidationService validationService;
+
 
     public UserResponseBody signUp(RegisterRequest userDtoRequest){
 
@@ -61,25 +60,13 @@ public class AuthService {
 
         String mdpCrypte = this.passwordEncoder.encode(user.getPassword());
         user.setPassword(mdpCrypte);
-        user.setRole(RoleType.ROLE_UTILISATEUR);
+        if(userDtoRequest.getRole() != null) {
+            user.setRole(userDtoRequest.getRole());
+        } else
+            user.setRole(RoleType.ROLE_UTILISATEUR);
         UserResponseBody userSaved = userMapper.toUserResponseBody(this.authRepository.save(user));
         return userSaved;
     }
-
-//    public void activation(Map<String, String> activation) {
-//        Validation validation=  this.validationService.lireEnFontionDuCode(activation.get("code"));
-//        if(Instant.now().isAfter(validation.getExpiration())){
-//            throw new RuntimeException("Votre code est expiré");
-//        }
-//        UserDto utilisateurActive =  this.authRepository.findById(validation.getUserDto().getId()).orElseThrow(() -> new RuntimeException("Utilisateur inconnu"));
-//        utilisateurActive.setActif(true);
-//        authRepository.save(utilisateurActive);
-//    }
-
-
-    //chercher un utilisateur dans la bse de données en fonction de son email
-    //il recupere toutes les infos et il compare des mdps car ils sont cryptés
-
 
 
     public AuthenticationResponse generate(String username) {
