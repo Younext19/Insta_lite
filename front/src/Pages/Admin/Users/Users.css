@@ -1,0 +1,47 @@
+.userContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+.tableTitle {
+  font-size: 22px;
+  font-weight: bold;
+}
+.tableInfo {
+  margin-left: 20px;
+  margin-top: 20px;
+}
+
+.tableDescription {
+  font-size: 20px;
+}
+.tableHeader {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+}
+.searchInput {
+  height: 40px;
+  border-radius: 8px;
+  padding: 8px;
+  border-color: black;
+  border-width: 1px;
+  width: 300px;
+}
+
+.users-table {
+  width: 80%; /* Adjust as needed */
+  border-collapse: collapse;
+}
+
+.users-table th,
+.users-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.users-table th {
+  background-color: #f2f2f2;
+}

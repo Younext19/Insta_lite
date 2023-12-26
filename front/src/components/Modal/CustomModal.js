@@ -5,7 +5,7 @@ export default function CustomModal({ isOpen, onRequestClose, children }) {
   const customStyles = {
     content: {
       width: "50%",
-      height: "400px",
+      height: "420px",
       margin: "auto",
       borderRadius: "8px",
       overflow: "hidden", // optional, to hide content overflowing the modal

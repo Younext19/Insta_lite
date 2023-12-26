@@ -1,8 +1,0 @@
-.feed-container {
-  display: flex;
-  flex-direction: row;
-}
-.feed-container > * {
-  flex-shrink: 0;
-  flex-grow: 0;
-}

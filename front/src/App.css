@@ -1,0 +1,16 @@
+/* styles.css */
+
+.app-container {
+  display: flex;
+}
+* {
+  box-sizing: border-box;
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding-left: 20px;
+  width: calc(100% - 250px);
+}
