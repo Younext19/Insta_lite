@@ -1,0 +1,48 @@
+/* SideBar.css */
+
+nav {
+  background-color: #192a56;
+  width: 250px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+  flex: 0 0 auto;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+.labelStyle {
+  text-decoration: none;
+  color: #fff;
+  padding: 10px;
+  display: block;
+  transition: background-color 0.3s;
+}
+
+li.selected a {
+  background-color: #3498db; /* Selected Background Color */
+  color: #fff; /* Text Color for Selected Item */
+}
+
+.labelStyle:hover {
+  background-color: #3498db;
+}
+
+.positionEnd {
+  position: absolute;
+  bottom: 0;
+  width: 250px;
+  margin-bottom: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
