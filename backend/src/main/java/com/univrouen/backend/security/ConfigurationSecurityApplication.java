@@ -26,6 +26,7 @@ import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class ConfigurationSecurityApplication{
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtFilter jwtFilter;
@@ -47,14 +48,8 @@ public class ConfigurationSecurityApplication{
                                 authorize ->
                                         authorize
                                                 .requestMatchers(POST,"/inscription").permitAll()
-                                                .requestMatchers(POST,"/activation").permitAll()
                                                 .requestMatchers(POST,"/connexion").permitAll()
                                                 .requestMatchers(POST,"/refresh-token").permitAll()
-                                                .requestMatchers(GET,"/users/**").permitAll()
-                                                .requestMatchers(DELETE,"/users/**").permitAll()
-
-                                                .requestMatchers(GET,"/users").permitAll()
-
                                                 .anyRequest().authenticated()
                         )
                         .sessionManagement(httpSecuritySessionManagementConfigurer ->

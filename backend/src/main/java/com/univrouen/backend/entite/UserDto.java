@@ -2,19 +2,16 @@ package com.univrouen.backend.entite;
 
 import com.univrouen.backend.RoleType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
-
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor(force = true)
@@ -33,18 +30,16 @@ public class UserDto  implements UserDetails {
     @Column(name="full_name")
     private String fullname;
     private String mail;
-    private boolean actif = false;
     @Column(name="img_url")
     private String imgUrl;
     @Enumerated(EnumType.STRING)
     private RoleType role;
-
-    @OneToMany(mappedBy = "userDto", cascade = CascadeType.REMOVE)
-    private List<Jwt> jwtList;
-
+    private boolean hasPrivileges;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<RefreshToken> refreshTokens;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(this.role.name()));
+        return Collections.singletonList(new SimpleGrantedAuthority(this.role.toString()));
     }
     public String getPassword() {
         return this.password;

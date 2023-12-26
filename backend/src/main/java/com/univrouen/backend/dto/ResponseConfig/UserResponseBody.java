@@ -1,4 +1,4 @@
-package com.univrouen.backend.dto.userConfigResponse;
+package com.univrouen.backend.dto.ResponseConfig;
 
 
 import lombok.AllArgsConstructor;
@@ -9,8 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserResponseBody {
+
+    private int id;
     private String pseudo;
     private String mail;
     private String fullname;
     private String role;
+    private boolean hasPrivileges;
 }

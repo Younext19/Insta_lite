@@ -17,7 +17,7 @@
 	<properties>
 		<org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
 		<java.version>17</java.version>
-		<version.lombok>1.18.18</version.lombok>
+		<version.lombok>1.18.30</version.lombok>
 		<version.mapstruct>1.4.2.Final</version.mapstruct>
 		<version.mapstruct-lombok>0.2.0</version.mapstruct-lombok>
 	</properties>
@@ -91,9 +91,19 @@
 			<artifactId>mapstruct</artifactId>
 			<version>${org.mapstruct.version}</version> <!-- Assurez-vous de spécifier la dernière version -->
 		</dependency>
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>9.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-buildpack-platform</artifactId>
+            <version>3.1.5</version>
+        </dependency>
 
 
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<plugins>

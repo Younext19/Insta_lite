@@ -2,17 +2,20 @@ package com.univrouen.backend.controllers;
 
 
 import com.univrouen.backend.dto.AthentificationDTO;
-import com.univrouen.backend.dto.userConfigResponse.UserResponseBody;
+import com.univrouen.backend.dto.RequestConfig.RefreshTokenRequest;
+import com.univrouen.backend.dto.RequestConfig.RegisterRequest;
+import com.univrouen.backend.dto.ResponseConfig.AuthenticationResponse;
+import com.univrouen.backend.dto.ResponseConfig.RefreshTokenResponse;
+import com.univrouen.backend.dto.ResponseConfig.UserResponseBody;
 import com.univrouen.backend.entite.UserDto;
 import com.univrouen.backend.exception.Error;
 import com.univrouen.backend.security.JwtService;
 import com.univrouen.backend.service.AuthService;
+import com.univrouen.backend.service.RefreshTokenService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -31,18 +34,14 @@ public class AuthController {
     private JwtService jwtService;
     @Autowired
     private AuthService authService;
+    @Autowired
+    private RefreshTokenService refreshTokenService;
 
     @PostMapping("/inscription")
-    public ResponseEntity<UserResponseBody> signUp(@RequestBody UserDto userDto) {
-        UserResponseBody newUser = this.authService.signUp(userDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+    public ResponseEntity<UserResponseBody> signUp(@RequestBody RegisterRequest userDtoRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.signUp(userDtoRequest));
     }
 
-//    @PostMapping("/activation")
-//    public void validation(@RequestBody Map<String,String> activation) {
-//
-//        this.authService.activation(activation);
-//    }
     @PostMapping("/connexion")
     public ResponseEntity connexion(@RequestBody AthentificationDTO athentificationDTO) {
         Authentication authenticate = null;
@@ -58,19 +57,19 @@ public class AuthController {
         }
 
         if(authenticate.isAuthenticated()){
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.jwtService.generate(athentificationDTO.username()));
+            return ResponseEntity.ok(this.authService.generate(athentificationDTO.username()));
         }
         return null;
     }
 
-    @PostMapping(path = "deconnexion")
-    public void logout() {
-        this.jwtService.logout();
-    }
-
+//    @PostMapping(path = "deconnexion")
+//    public void logout() {
+//        this.jwtService.logout();
+//    }
+//
     @PostMapping(path = "refresh-token")
-    public @ResponseBody Map<String, String> refreshToken(@RequestBody Map<String, String> refreshTokenRequest) {
-        return this.jwtService.refreshToken(refreshTokenRequest);
+    public ResponseEntity<RefreshTokenResponse> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        return ResponseEntity.ok(this.refreshTokenService.refreshToken(refreshTokenRequest));
     }
 }
 
