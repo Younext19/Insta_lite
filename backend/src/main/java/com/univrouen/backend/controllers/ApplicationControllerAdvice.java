@@ -1,4 +1,5 @@
 package com.univrouen.backend.controllers;
+import com.univrouen.backend.exception.ImageNotFoundException;
 import com.univrouen.backend.exception.InstaException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
@@ -74,5 +75,17 @@ public class ApplicationControllerAdvice {
         problemDetail.setProperty("erreur",e.getMessage());
         return problemDetail;
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ImageNotFoundException.class)
+    public @ResponseBody ProblemDetail handleException(
+            ImageNotFoundException e) {
+        final ProblemDetail problemDetail =  ProblemDetail.forStatusAndDetail(
+                HttpStatus.NOT_FOUND,"la ressource n'a pas été trouvé"
+        );
+        problemDetail.setProperty("erreur",e.getMessage());
+        return problemDetail;
+    }
+
 
 }

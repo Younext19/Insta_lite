@@ -13,4 +13,6 @@ public interface ImageRepository extends JpaRepository<ImageEntity, Integer> {
     Optional<ImageEntity> findImageByTitle(String title);
 
     ImageEntity findById(Long id);
+
+    Optional<ImageEntity> findByName(String name);
 }

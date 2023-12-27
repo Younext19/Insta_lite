@@ -7,11 +7,13 @@ import com.univrouen.backend.config.mapper.ImageMapper;
 import com.univrouen.backend.config.ResponseConfig.ImageResponse;
 import com.univrouen.backend.entite.ImageEntity;
 import com.univrouen.backend.entite.UserDto;
+import com.univrouen.backend.exception.ImageNotFoundException;
 import com.univrouen.backend.exception.InstaException;
 import com.univrouen.backend.repository.ImageRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.UrlResource;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,8 +21,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.security.core.Authentication;
+import org.springframework.core.io.Resource;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -74,7 +78,7 @@ public class ImageService {
                 .title(title)
                 .isPrivate(isPrivate)
                 .user(userDto)
-                .name(this.host+fileName)
+                .name(fileName)
                 .creationDate(date)
                 .build();
         Path targetLocation = this.fileStorageLocation.resolve(fileName);
@@ -159,7 +163,7 @@ public class ImageService {
         String port = environment.getProperty("server.port");
         String address = environment.getProperty("server.address");
 
-        this.host = "http://" + address + ":" + port + "/images/";
+        this.host = "http://" + address + ":" + port + "/images/download/";
     }
 
     public ImageResponse getImageById(int id) {
@@ -192,4 +196,18 @@ public class ImageService {
         }
     }
 
+    public Resource downloadByName(String name) throws Exception {
+
+            ImageEntity imageEntity = imageRepository.findByName(name)
+                    .orElseThrow(() -> new ImageNotFoundException("L'image " + name + " n'existe pas ou une erreur dans le chargement "));
+            log.info(imageEntity.getName());
+            Path image = this.fileStorageLocation.resolve(imageEntity.getName());
+            Resource resource = new UrlResource(image.toUri());
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+
+            } else {
+                throw new ImageNotFoundException("L'image " + name + " n'existe pas ou une erreur dans le chargement ");
+            }
     }
+}

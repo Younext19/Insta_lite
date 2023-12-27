@@ -1,10 +1,14 @@
 package com.univrouen.backend.controllers;
 
 
+import com.univrouen.backend.config.FileTypeDetector;
 import com.univrouen.backend.config.ResponseConfig.ImageResponse;
 import com.univrouen.backend.service.ImageService;
+import org.springframework.core.io.Resource;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -64,15 +68,21 @@ public class ImageController {
 
 
 
+    @GetMapping("/download/{name}")
+    public ResponseEntity<Resource> downloadByName(@PathVariable String name) throws Exception {
+        Resource image = imageService.downloadByName(name);
+        String mimeType;
+        try {
+            mimeType = FileTypeDetector.determineFileType(image.getFile());
+        } catch (IOException ex) {
+            throw new RuntimeException("Impossible de determiner le type du fichier " + name);
+        }
 
-
-
-
-
-
-
-//    @PostMapping
-//    public Image
-
+        return ResponseEntity.ok()
+                .contentType(MediaType.valueOf(mimeType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + image.getFilename() + "\"")
+                .body(image);
+    }
 }
+
 
