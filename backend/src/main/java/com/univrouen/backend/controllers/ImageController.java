@@ -25,7 +25,7 @@ public class ImageController {
 
 
     //C
-    @PostMapping("upload")
+    @PostMapping("/upload")
     public ResponseEntity<ImageResponse> upload(@RequestParam("image") MultipartFile image,@RequestParam("title") String title,
                                                 @RequestParam("isPrivate") boolean isPrivate) throws IOException {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.imageService.uploadImage(image, title,isPrivate));
