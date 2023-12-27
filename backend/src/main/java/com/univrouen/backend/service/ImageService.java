@@ -32,6 +32,7 @@ import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -73,12 +74,14 @@ public class ImageService {
             throw new InstaException("L'extension :  '" + extension + " n'est pas autorisée");
         }
         String fileName = generateNameFile(extractName,extension);
+        String extractNameUnique = generateOriginNameFile(extension);
         Date date = new Date();
         ImageEntity imageEntity = ImageEntity.builder()
                 .title(title)
                 .isPrivate(isPrivate)
                 .user(userDto)
-                .name(fileName)
+                .originName(extractNameUnique)
+                .nameBdd(fileName)
                 .creationDate(date)
                 .build();
         Path targetLocation = this.fileStorageLocation.resolve(fileName);
@@ -90,17 +93,11 @@ public class ImageService {
                 .fullnameUser(userDto.getFullname())
                 .pseudoUser(userDto.getPseudo())
                 .creationDate(date)
-                .name(this.host+fileName)
+                .originName(this.host+extractNameUnique)
                 .build();
 
         }
 
-
-    private String generateNameFile(String name, String extension){
-        String newName;
-        newName = System.currentTimeMillis() + UUID.randomUUID().toString() +  "." + extension;
-        return newName;
-    }
 
     public List<ImageResponse> getAllImages() {
 
@@ -123,48 +120,50 @@ public class ImageService {
     }
 
 
-    public ImageResponse updateImage(Long id, String title, boolean isPrivate, MultipartFile image) throws IOException {
-        ImageEntity imageFromBdd = imageRepository.findById(id);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication != null && !(authentication instanceof AnonymousAuthenticationToken)){
-            UserDto userDto = (UserDto) authentication.getPrincipal();
-            if(imageFromBdd.getUser().getMail().equals(userDto.getMail()) || userDto.getRole().equals(RoleType.ROLE_ADMINISTRATEUR)) {
-                if (title != null && !title.isEmpty() && !title.isBlank()) {
-                    imageFromBdd.setTitle(title);
-                }
-                if (!image.isEmpty() && !image.getOriginalFilename().isBlank() || !image.getOriginalFilename().isEmpty()) {
-                    Path targetLocation = this.fileStorageLocation.resolve(image.getOriginalFilename());
-                    Files.copy(image.getInputStream(), targetLocation);
-                    this.imageRepository.save(imageFromBdd);
-                    return ImageResponse.builder()
-                            .creationDate(new Date())
-                            .isPrivate(isPrivate)
-                            .title(title)
-                            .fullnameUser(userDto.getFullname())
-                            .pseudoUser(userDto.getPseudo())
-                            .build();
-                } else {
-                    throw new RuntimeException("erreur dans les infos saisies");
-                }
-            } else {
-                throw new RemoteException("faut etre le createur de l'image ou un admin pour modifier !");
+    public ImageResponse updateImage(String name, String title, boolean isPrivate, MultipartFile newImage) throws IOException {
+        ImageEntity imageFromBdd = imageRepository.findByOriginName(name)
+                .orElseThrow(() -> new ImageNotFoundException("L'image " + name + " n'existe pas ou une erreur dans le chargement "));
+
+        UserDto userDto = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (userDto == null || (!(userDto.getRole().equals(RoleType.ROLE_ADMINISTRATEUR)) && !imageFromBdd.getUser().getMail().equals(userDto.getMail()))) {
+            throw new SecurityException("Vous devez être le créateur de l'image ou un administrateur pour la modifier.");
+        }
+        if (title != null && !title.trim().isEmpty()) {
+            imageFromBdd.setTitle(title);
+        }
+        imageFromBdd.setPrivate(isPrivate);
+        if (newImage != null && !newImage.isEmpty()) {
+            String originalFilename = newImage.getOriginalFilename();
+            String extension = StringUtils.getFilenameExtension(originalFilename);
+
+            if (!Constant.EXTENSIONS.contains(extension)) {
+                throw new InstaException("L'extension : '" + extension + "' n'est pas autorisée");
             }
 
-        } else {
-            throw new RemoteException("faut etre connecté et  createur de l'image ou un admin pour modifier !");
+            String newFileName = generateNameFile(originalFilename, extension);
+            Path targetLocation = this.fileStorageLocation.resolve(newFileName);
 
+            Path oldImage = this.fileStorageLocation.resolve(imageFromBdd.getNameBdd());
+            if (Files.exists(oldImage)) {
+                Files.delete(oldImage);
+            }
+            Files.copy(newImage.getInputStream(), targetLocation);
+            imageFromBdd.setNameBdd(newFileName);
         }
 
+        imageRepository.save(imageFromBdd);
+
+        return ImageResponse.builder()
+                .title(imageFromBdd.getTitle())
+                .isPrivate(imageFromBdd.isPrivate())
+                .fullnameUser(userDto.getFullname())
+                .pseudoUser(userDto.getPseudo())
+                .creationDate(imageFromBdd.getCreationDate())
+                .originName(this.host + imageFromBdd.getOriginName())
+                .build();
     }
 
 
-
-    private void instantiateHost(){
-        String port = environment.getProperty("server.port");
-        String address = environment.getProperty("server.address");
-
-        this.host = "http://" + address + ":" + port + "/images/download/";
-    }
 
     public ImageResponse getImageById(int id) {
         ImageEntity image = this.imageRepository.findById((id)).orElseThrow(()->
@@ -187,21 +186,10 @@ public class ImageService {
         }
     }
 
-    private void deleteImageFromFolder(ImageEntity imageEntity){
-        Path imagePath = this.fileStorageLocation.resolve(imageEntity.getName());
-        try{
-            Files.delete(imagePath);
-        }catch(IOException exception){
-            throw new InstaException("L'image n'a pas pu être supprimé");
-        }
-    }
-
     public Resource downloadByName(String name) throws Exception {
-
-            ImageEntity imageEntity = imageRepository.findByName(name)
+            ImageEntity imageEntity = imageRepository.findByOriginName(name)
                     .orElseThrow(() -> new ImageNotFoundException("L'image " + name + " n'existe pas ou une erreur dans le chargement "));
-            log.info(imageEntity.getName());
-            Path image = this.fileStorageLocation.resolve(imageEntity.getName());
+            Path image = this.fileStorageLocation.resolve(imageEntity.getNameBdd());
             Resource resource = new UrlResource(image.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return resource;
@@ -209,5 +197,32 @@ public class ImageService {
             } else {
                 throw new ImageNotFoundException("L'image " + name + " n'existe pas ou une erreur dans le chargement ");
             }
+    }
+
+    private void deleteImageFromFolder(ImageEntity imageEntity){
+        Path imagePath = this.fileStorageLocation.resolve(imageEntity.getNameBdd());
+        try{
+            Files.delete(imagePath);
+        }catch(IOException exception){
+            throw new InstaException("L'image n'a pas pu être supprimé");
+        }
+    }
+
+    private void instantiateHost(){
+        String port = environment.getProperty("server.port");
+        String address = environment.getProperty("server.address");
+
+        this.host = "http://" + address + ":" + port + "/images/download/";
+    }
+
+    private String generateNameFile(String name, String extension){
+        String newName;
+        newName = Long.toString(System.nanoTime()) + "-" + UUID.randomUUID().toString() +  "." + extension;
+        return newName;
+    }
+
+    private String generateOriginNameFile(String extension){
+        String newName = UUID.randomUUID().toString() + "." + extension;
+        return newName;
     }
 }

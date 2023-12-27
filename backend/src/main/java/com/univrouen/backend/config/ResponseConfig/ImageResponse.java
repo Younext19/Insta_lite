@@ -15,5 +15,5 @@ public class ImageResponse {
     private boolean isPrivate;
     private String fullnameUser;
     private String pseudoUser;
-    private String name;
+    private String originName;
 }

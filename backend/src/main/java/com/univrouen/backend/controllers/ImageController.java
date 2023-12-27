@@ -49,11 +49,11 @@ public class ImageController {
     //U
     @PreAuthorize("hasAnyAuthority('ROLE_ADMINISTRATEUR')")
 
-    @PatchMapping ("/update/{id}")
-    public ResponseEntity<ImageResponse> updateImage(@PathVariable Long id, @RequestParam ("title") String title,
+    @PatchMapping ("/update/{name}")
+    public ResponseEntity<ImageResponse> updateImage(@PathVariable String name, @RequestParam ("title") String title,
                                                      @RequestParam ("isPrivate") boolean isPrivate,
                                                      @RequestParam("image") MultipartFile image) throws IOException {
-        return ResponseEntity.status(HttpStatus.OK).body(this.imageService.updateImage(id,title,isPrivate,image));
+        return ResponseEntity.status(HttpStatus.OK).body(this.imageService.updateImage(name,title,isPrivate,image));
 
     }
 
