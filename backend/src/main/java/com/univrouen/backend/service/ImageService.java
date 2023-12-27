@@ -4,8 +4,7 @@ package com.univrouen.backend.service;
 import com.univrouen.backend.RoleType;
 import com.univrouen.backend.config.CONSTANT.Constant;
 import com.univrouen.backend.config.mapper.ImageMapper;
-import com.univrouen.backend.dto.ResponseConfig.ImageResponse;
-import com.univrouen.backend.dto.ResponseConfig.UserResponseBody;
+import com.univrouen.backend.config.ResponseConfig.ImageResponse;
 import com.univrouen.backend.entite.ImageEntity;
 import com.univrouen.backend.entite.UserDto;
 import com.univrouen.backend.exception.InstaException;
@@ -22,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.security.core.Authentication;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -66,7 +66,7 @@ public class ImageService {
         String extension = StringUtils.getFilenameExtension(extractName);
 
         if(!Constant.EXTENSIONS.contains(extension)){
-            throw new InstaException("Not allowed '" + extension + "' extension .");
+            throw new InstaException("L'extension :  '" + extension + " n'est pas autorisée");
         }
         String fileName = generateNameFile(extractName,extension);
         Date date = new Date();
@@ -170,16 +170,16 @@ public class ImageService {
         return imageMapper.toImageResponse(image);
     }
 
-    public void deleteById(int id) {
+    public void deleteById(int id) throws AccessDeniedException {
         ImageEntity imageEntity = imageRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Image not found with this id: " + id));
 
         UserDto userDto = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(imageEntity.getUser().getMail().equals(userDto.getMail())){
+        if(imageEntity.getUser().getMail().equals(userDto.getMail()) || userDto.getRole().equals(RoleType.ROLE_ADMINISTRATEUR)){
             deleteImageFromFolder(imageEntity);
             imageRepository.delete(imageEntity);
         }else{
-            throw new InstaException("You are not allowed to update this image.");
+            throw new AccessDeniedException("");
         }
     }
 
@@ -188,7 +188,7 @@ public class ImageService {
         try{
             Files.delete(imagePath);
         }catch(IOException exception){
-            throw new InstaException("Could not delete the image");
+            throw new InstaException("L'image n'a pas pu être supprimé");
         }
     }
 

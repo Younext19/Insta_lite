@@ -3,18 +3,16 @@ package com.univrouen.backend.service;
 
 import com.univrouen.backend.RoleType;
 import com.univrouen.backend.config.mapper.UserMapper;
-import com.univrouen.backend.dto.RequestConfig.RegisterRequest;
-import com.univrouen.backend.dto.ResponseConfig.UserResponseBody;
+import com.univrouen.backend.config.RequestConfig.RegisterRequest;
+import com.univrouen.backend.config.ResponseConfig.UserResponseBody;
 import com.univrouen.backend.entite.UserDto;
 import com.univrouen.backend.exception.InstaException;
 import com.univrouen.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -39,7 +37,7 @@ public class UserService  implements UserDetailsService {
     private BCryptPasswordEncoder passwordEncoder;
 
     public List<UserResponseBody> getAllUsers(){
-        return  userMapper.toUserResponseBodyList(this.userRepository.findAll());
+        return userMapper.toUserResponseBodyList(this.userRepository.findAll());
     }
 
     public UserResponseBody getUserById(int id) {
@@ -98,6 +96,6 @@ public class UserService  implements UserDetailsService {
 
             return this.userMapper.toUserResponseBody(userFromBdd);
         } else
-            throw new InstaException("Vous n'avez pas le droit de modifier un autre compte que le votre!");
+            throw new AccessDeniedException("");
     }
 }

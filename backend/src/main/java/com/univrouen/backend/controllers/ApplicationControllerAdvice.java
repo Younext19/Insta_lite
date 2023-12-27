@@ -1,0 +1,71 @@
+package com.univrouen.backend.controllers;
+import com.univrouen.backend.exception.InstaException;
+import io.jsonwebtoken.security.SignatureException;
+import io.jsonwebtoken.MalformedJwtException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.lang.reflect.MalformedParameterizedTypeException;
+import java.util.Map;
+
+@Slf4j
+@RestControllerAdvice
+public class ApplicationControllerAdvice {
+
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(value = BadCredentialsException.class)
+    public @ResponseBody ProblemDetail badCredentialsException(BadCredentialsException badCredentialsException){
+        final ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.UNAUTHORIZED,"identifiant ou mot de passe n'est pas valide"
+        );
+        problemDetail.setProperty("erreur","nous n'avons pas pu vous identifié");
+        return problemDetail;
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(value = {SignatureException.class, MalformedJwtException.class})
+    public @ResponseBody ProblemDetail jwtException(Exception signatureException){
+        final ProblemDetail problemDetail =  ProblemDetail.forStatusAndDetail(
+                HttpStatus.UNAUTHORIZED,"Token non valide"
+        );
+        problemDetail.setProperty("erreur","nous n'avons pas pu vérifié votre jwt");
+        return problemDetail;
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public @ResponseBody ProblemDetail accessDeniedException(AccessDeniedException accessDeniedException){
+        final ProblemDetail problemDetail =  ProblemDetail.forStatusAndDetail(
+                HttpStatus.FORBIDDEN,"Droits requises"
+        );
+        problemDetail.setProperty("erreur","Vous n'avez pas le droit d'accéder à effectuer cette action");
+        return problemDetail;
+
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(InstaException.class)
+    public @ResponseBody ProblemDetail handleException(
+            InstaException e) {
+        final ProblemDetail problemDetail =  ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT,"conflit detecté"
+        );
+        problemDetail.setProperty("erreur",e.getMessage());
+        return problemDetail;
+    }
+
+
+
+
+
+
+}

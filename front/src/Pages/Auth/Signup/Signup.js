@@ -9,6 +9,7 @@ import user from "../../../assets/user.png";
 import idCard from "../../../assets/id-card.png";
 import visible from "../../../assets/visible.png";
 import hide from "../../../assets/hide.png";
+import { signup } from "../../../api/auth";
 
 const SignupSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -33,10 +34,6 @@ export default function Signup() {
       verifyPassword: "",
     },
     validationSchema: SignupSchema,
-    onSubmit: (values) => {
-      console.log("Form submitted:", values);
-      // Add your registration logic here
-    },
   });
 
   useEffect(() => {
@@ -45,6 +42,25 @@ export default function Signup() {
       setValidFormStyle(false);
     }
   }, [formik.isValid]);
+  // on submit
+  const onSubmit = () => {
+    console.log("Form submitted:", formik.values);
+    const userData = {
+      mail: formik.values.email,
+      fullName: formik.values.fullName,
+      pseudo: formik.values.username,
+      password: formik.values.password,
+    };
+
+    signup(userData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // Add your registration logic here
+  };
 
   return (
     <div className="container">
@@ -128,6 +144,9 @@ export default function Signup() {
           />
         </div>
 
+        <a className="submitButton" onClick={onSubmit}>
+          Créer un compte
+        </a>
         <a
           className="alreadyHaveAnAccount"
           onClick={() => {

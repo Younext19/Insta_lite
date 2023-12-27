@@ -1,7 +1,7 @@
 package com.univrouen.backend.service;
 
-import com.univrouen.backend.dto.RequestConfig.RefreshTokenRequest;
-import com.univrouen.backend.dto.ResponseConfig.RefreshTokenResponse;
+import com.univrouen.backend.config.RequestConfig.RefreshTokenRequest;
+import com.univrouen.backend.config.ResponseConfig.RefreshTokenResponse;
 import com.univrouen.backend.entite.RefreshToken;
 import com.univrouen.backend.entite.UserDto;
 import com.univrouen.backend.repository.RefreshTokenRepository;
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Map;
 import java.util.UUID;
 
 

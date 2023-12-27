@@ -1,7 +1,7 @@
 package com.univrouen.backend.config.mapper;
 
-import com.univrouen.backend.dto.RequestConfig.ImageRequest;
-import com.univrouen.backend.dto.ResponseConfig.ImageResponse;
+import com.univrouen.backend.config.RequestConfig.ImageRequest;
+import com.univrouen.backend.config.ResponseConfig.ImageResponse;
 import com.univrouen.backend.entite.ImageEntity;
 import org.mapstruct.Mapper;
 

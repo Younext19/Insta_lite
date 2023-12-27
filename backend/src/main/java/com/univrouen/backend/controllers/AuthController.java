@@ -1,14 +1,11 @@
 package com.univrouen.backend.controllers;
 
 
-import com.univrouen.backend.dto.AthentificationDTO;
-import com.univrouen.backend.dto.RequestConfig.RefreshTokenRequest;
-import com.univrouen.backend.dto.RequestConfig.RegisterRequest;
-import com.univrouen.backend.dto.ResponseConfig.AuthenticationResponse;
-import com.univrouen.backend.dto.ResponseConfig.RefreshTokenResponse;
-import com.univrouen.backend.dto.ResponseConfig.UserResponseBody;
-import com.univrouen.backend.entite.UserDto;
-import com.univrouen.backend.exception.Error;
+import com.univrouen.backend.config.AthentificationDTO;
+import com.univrouen.backend.config.RequestConfig.RefreshTokenRequest;
+import com.univrouen.backend.config.RequestConfig.RegisterRequest;
+import com.univrouen.backend.config.ResponseConfig.RefreshTokenResponse;
+import com.univrouen.backend.config.ResponseConfig.UserResponseBody;
 import com.univrouen.backend.security.JwtService;
 import com.univrouen.backend.service.AuthService;
 import com.univrouen.backend.service.RefreshTokenService;
@@ -22,8 +19,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @AllArgsConstructor
 @Slf4j
@@ -44,18 +39,9 @@ public class AuthController {
 
     @PostMapping("/connexion")
     public ResponseEntity connexion(@RequestBody AthentificationDTO athentificationDTO) {
-        Authentication authenticate = null;
-        try {
-            authenticate = authenticationManager.authenticate(
+        Authentication authenticate = authenticationManager.authenticate(
                    new UsernamePasswordAuthenticationToken(athentificationDTO.username(), athentificationDTO.password()
                    ));
-       } catch (BadCredentialsException e){
-            String msgError = "l'email ou le mot de passe est incorrect";
-            //pour faire un objet json :  message : msgError
-            Error error = Error.builder().message(msgError).build();
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
-        }
-
         if(authenticate.isAuthenticated()){
             return ResponseEntity.ok(this.authService.generate(athentificationDTO.username()));
         }

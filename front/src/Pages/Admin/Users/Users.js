@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Table from "../components/Table/Table";
 
 import "./Users.css";
@@ -8,27 +8,27 @@ import { useState } from "react";
 import DeleteUserModal from "./components/DeleteUserModal";
 import EditUserModal from "./components/EditUserModal";
 import AddUserModal from "./components/AddUserModal";
-const userData = [
-  {
-    id: "randomdazm",
-    fullname: "haddam",
-    pseudo: "younes",
-    mail: "younes@younes.frr",
-    role: "ROLE.CHEKAM",
-  },
-  {
-    id: "randomdazm",
-    fullname: "haddam",
-    pseudo: "younes",
-    mail: "younes@younes.frr",
-    role: "ROLE.CHEKAM",
-  },
-];
+import { deleteUser, getUsers } from "../../../api/users";
+
 export default function Users() {
+  const [userData, setUserData] = useState([]);
   const [deleteUserModal, setDeleteUserModal] = useState(false);
   const [addUserModal, setAddUserModal] = useState(false);
   const [editUserModal, setEditUserModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState({});
+  const token =
+    "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDM2MzY2ODUsImZ1bGxuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbkBhZG1pbi5mcnIifQ.hiOohE2ed5xzeqycdRNd0R9IX_vFu9CZabxQXsPif0w";
+  useEffect(() => {
+    getUsers(token).then((data) => setUserData(data));
+  }, []);
+
+  const deleteUserFunc = () => {
+    console.log("delete");
+    deleteUser(token, selectedUser.id).then((data) => {
+      setDeleteUserModal(false);
+      getUsers(token).then((data) => setUserData(data));
+    });
+  };
   return (
     <div className="userContent">
       <div className="tableInfo">
@@ -56,10 +56,10 @@ export default function Users() {
             <th>Actions</th>
           </tr>
         </thead>
-        {userData.map((user, index) => (
+        {userData?.map((user, index) => (
           <tr key={index}>
-            <td>{user.fullname}</td>
-            <td>{user.pseudo}</td>
+            <td>{user.fullname ? user.fullname : "N/A"}</td>
+            <td>{user.pseudo ? user.pseudo : "N/A"}</td>
             <td>{user.mail}</td>
             <td>{user.role}</td>
             <td>
@@ -88,6 +88,7 @@ export default function Users() {
         showModal={deleteUserModal}
         closeModal={() => setDeleteUserModal(false)}
         userName={selectedUser.fullname}
+        handleDelete={deleteUserFunc}
       />
       <AddUserModal
         showModal={addUserModal}

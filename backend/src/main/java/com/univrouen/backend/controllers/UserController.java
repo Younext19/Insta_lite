@@ -1,8 +1,8 @@
 package com.univrouen.backend.controllers;
 
 
-import com.univrouen.backend.dto.RequestConfig.RegisterRequest;
-import com.univrouen.backend.dto.ResponseConfig.UserResponseBody;
+import com.univrouen.backend.config.RequestConfig.RegisterRequest;
+import com.univrouen.backend.config.ResponseConfig.UserResponseBody;
 import com.univrouen.backend.service.AuthService;
 import com.univrouen.backend.service.UserService;
 import lombok.AllArgsConstructor;

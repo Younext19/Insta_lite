@@ -21,6 +21,8 @@ const SideBar = ({ userRole }) => {
 
   const links = userRole === "admin" ? adminLinks : userLinks;
 
+  const token = localStorage.getItem("token");
+
   const [selectedLink, setSelectedLink] = useState(
     // Retrieve the selected link from localStorage or set the default
     localStorage.getItem("selectedLink") || links[0].to
@@ -34,6 +36,8 @@ const SideBar = ({ userRole }) => {
   function disconnectUser() {
     //Vider le cache & go to login
     console.log("user disconnected");
+    console.log("🚀 ~ file: SideBar.js:25 ~ SideBar ~ token:", token);
+    console.log("zebi");
   }
   return (
     <nav>
@@ -52,7 +56,7 @@ const SideBar = ({ userRole }) => {
       </ul>
       <div className="positionEnd">
         <CustomButton
-          text={"Se déconnecter"}
+          text={token ? "Se déconnecter" : "S'authentifier"}
           onClick={disconnectUser}
           personnalisedWidth={"70%"}
         />
