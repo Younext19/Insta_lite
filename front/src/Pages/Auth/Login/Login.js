@@ -7,6 +7,7 @@ import mail from "../../../assets/mail.png";
 import pw from "../../../assets/password.png";
 import user from "../../../assets/user.png";
 import CustomButton from "../../../components/Button/CustomButton";
+import { login } from "../../../api/auth";
 
 const LoginSchema = Yup.object().shape({
   mail: Yup.string().email("Invalid email").required("Email is required"),
@@ -20,14 +21,24 @@ export default function Login() {
       password: "",
     },
     validationSchema: LoginSchema,
-    onSubmit: (values) => {
-      console.log("Form submitted:", values);
-      console.log("🚀 ~ file: Login.js:25 ~ Login ~ values:", values);
-      console.log("🚀 ~ file: Login.js:25 ~ Login ~ values:", values);
-      // Add your login logic here
-    },
   });
 
+  const onSubmit = () => {
+    console.log("Form submitted:", formik.values);
+    const loginData = {
+      username: formik.values.mail,
+      password: formik.values.password,
+    };
+    login(loginData)
+      .then((res) => {
+        console.log(res);
+        // save token to local storage
+        localStorage.setItem("token", res.data.token);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div className="container">
       <div className="boxForm">
@@ -62,7 +73,7 @@ export default function Login() {
 
         <CustomButton
           text={"Login"}
-          onClick={formik.handleSubmit}
+          onClick={onSubmit}
           personnalisedWidth={"50%"}
           personnalisedMarginTop={"20px"}
           type={"submit"}

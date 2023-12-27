@@ -2,9 +2,9 @@ package com.univrouen.backend.service;
 import com.univrouen.backend.RoleType;
 
 import com.univrouen.backend.config.mapper.UserMapper;
-import com.univrouen.backend.dto.RequestConfig.RegisterRequest;
-import com.univrouen.backend.dto.ResponseConfig.AuthenticationResponse;
-import com.univrouen.backend.dto.ResponseConfig.UserResponseBody;
+import com.univrouen.backend.config.RequestConfig.RegisterRequest;
+import com.univrouen.backend.config.ResponseConfig.AuthenticationResponse;
+import com.univrouen.backend.config.ResponseConfig.UserResponseBody;
 import com.univrouen.backend.entite.RefreshToken;
 import com.univrouen.backend.entite.UserDto;
 import com.univrouen.backend.exception.InstaException;
@@ -54,7 +54,7 @@ public class AuthService {
 
         Optional<UserDto> optionalUtilisateur = this.authRepository.findByMail(userDtoRequest.getMail());
         if(optionalUtilisateur.isPresent()){
-            throw new InstaException("A user with the email '" + userDtoRequest.getMail() + "' already exists.");
+            throw new InstaException("Un utilisateur est déja inscrit avec mail '" + userDtoRequest.getMail());
         }
         UserDto user =  userMapper.toUserEntity(userDtoRequest);
 

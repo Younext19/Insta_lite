@@ -1,9 +1,7 @@
 package com.univrouen.backend.controllers;
 
 
-import com.univrouen.backend.dto.RequestConfig.ImageRequest;
-import com.univrouen.backend.dto.ResponseConfig.ImageResponse;
-import com.univrouen.backend.dto.ResponseConfig.UserResponseBody;
+import com.univrouen.backend.config.ResponseConfig.ImageResponse;
 import com.univrouen.backend.service.ImageService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 
@@ -58,7 +57,7 @@ public class ImageController {
     //D
     @PreAuthorize("hasAnyAuthority('ROLE_ADMINISTRATEUR')")
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteById(@PathVariable int id){
+    public ResponseEntity deleteById(@PathVariable int id) throws AccessDeniedException {
         this.imageService.deleteById(id);
         return  ResponseEntity.status(HttpStatus.OK).build();
     }
