@@ -1,7 +1,7 @@
 package com.univrouen.backend.service;
 
 
-import com.univrouen.backend.RoleType;
+import com.univrouen.backend.config.CONSTANT.RoleType;
 import com.univrouen.backend.config.mapper.UserMapper;
 import com.univrouen.backend.config.RequestConfig.RegisterRequest;
 import com.univrouen.backend.config.ResponseConfig.UserResponseBody;

@@ -20,7 +20,7 @@ public abstract class ImageMapper {
                 .creationDate(image.getCreationDate())
                 .title(image.getTitle())
                 .isPrivate(image.isPrivate())
-                .name(image.getName())
+                .originName(image.getOriginName())
                 .build();
     }
 
@@ -33,7 +33,7 @@ public abstract class ImageMapper {
                     .creationDate(img.getCreationDate())
                     .title(img.getTitle())
                     .isPrivate(img.isPrivate())
-                    .name(img.getName())
+                    .originName(img.getOriginName())
                     .build());
         }
         return imageResponses;

@@ -1,6 +1,6 @@
 package com.univrouen.backend.entite;
 
-import com.univrouen.backend.RoleType;
+import com.univrouen.backend.config.CONSTANT.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,6 +37,8 @@ public class UserDto  implements UserDetails {
     private boolean hasPrivileges;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RefreshToken> refreshTokens;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ImageEntity> images;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(this.role.toString()));

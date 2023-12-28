@@ -2,7 +2,7 @@ package com.univrouen.backend.config.ResponseConfig;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.univrouen.backend.RoleType;
+import com.univrouen.backend.config.CONSTANT.RoleType;
 import lombok.Builder;
 import lombok.Data;
 

@@ -22,7 +22,9 @@ public class ImageEntity {
     private String title;
     private boolean isPrivate;
     private Date creationDate;
-    private String name;
+    private String originName;
+    private String nameBdd;
+
     public boolean isPrivate(){
         return this.isPrivate;
     }
