@@ -89,7 +89,7 @@ public class UserService  implements UserDetailsService {
                 userFromBdd.setPassword(mdpCrypte);
             }
             if(userDtoRequest.getRole() != null) {
-                userFromBdd.setRole(userDto.getRole());
+                userFromBdd.setRole(userDtoRequest.getRole());
             }
             userFromBdd.setHasPrivileges(userDtoRequest.isHasPrivileges());
             this.userRepository.save(userFromBdd);
