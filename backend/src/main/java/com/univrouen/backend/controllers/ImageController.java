@@ -48,7 +48,6 @@ public class ImageController {
 
     //U
     @PreAuthorize("hasAnyAuthority('ROLE_ADMINISTRATEUR')")
-
     @PatchMapping ("/update/{name}")
     public ResponseEntity<ImageResponse> updateImage(@PathVariable String name, @RequestParam ("title") String title,
                                                      @RequestParam ("isPrivate") boolean isPrivate,
@@ -60,9 +59,9 @@ public class ImageController {
 
     //D
     @PreAuthorize("hasAnyAuthority('ROLE_ADMINISTRATEUR')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteById(@PathVariable int id) throws AccessDeniedException {
-        this.imageService.deleteById(id);
+    @DeleteMapping("/{name}")
+    public ResponseEntity deleteByName(@PathVariable String name) throws AccessDeniedException {
+        this.imageService.deleteByName(name);
         return  ResponseEntity.status(HttpStatus.OK).build();
     }
 

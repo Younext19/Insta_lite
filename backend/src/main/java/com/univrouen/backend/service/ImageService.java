@@ -1,7 +1,7 @@
 package com.univrouen.backend.service;
 
 
-import com.univrouen.backend.RoleType;
+import com.univrouen.backend.config.CONSTANT.RoleType;
 import com.univrouen.backend.config.CONSTANT.Constant;
 import com.univrouen.backend.config.mapper.ImageMapper;
 import com.univrouen.backend.config.ResponseConfig.ImageResponse;
@@ -24,15 +24,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 
@@ -100,23 +97,19 @@ public class ImageService {
 
 
     public List<ImageResponse> getAllImages() {
-
         List<ImageEntity> images = this.imageRepository.findAll();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(!(authentication instanceof AnonymousAuthenticationToken)){
             UserDto userDto = (UserDto) authentication.getPrincipal();
-            if(userDto.isHasPrivileges()){
+            if(userDto.getRole().equals(RoleType.ROLE_ADMINISTRATEUR) || userDto.isHasPrivileges()){
                 return imageMapper.toImageResponseList(images);
-            } else {
-              return  imageMapper.toImageResponseList(images.stream()
-                        .filter(imageEntity -> !imageEntity.isPrivate()).toList()
-                      );
             }
-        }
-        else {
             return  imageMapper.toImageResponseList(images.stream()
-                    .filter(imageEntity -> !imageEntity.isPrivate()).toList());
+                            .filter(imageEntity -> !imageEntity.isPrivate()).toList()
+            );
         }
+        return imageMapper.toImageResponseList(images.stream()
+                    .filter(imageEntity -> !imageEntity.isPrivate()).toList());
     }
 
 
@@ -173,10 +166,9 @@ public class ImageService {
         return imageMapper.toImageResponse(image);
     }
 
-    public void deleteById(int id) throws AccessDeniedException {
-        ImageEntity imageEntity = imageRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Image not found with this id: " + id));
-
+    public void deleteByName(String name) throws AccessDeniedException {
+        ImageEntity imageEntity = imageRepository.findByOriginName(name)
+                .orElseThrow(() -> new ImageNotFoundException("L'image " + name + " n'existe pas ou une erreur lors de la suppression"));;
         UserDto userDto = (UserDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(imageEntity.getUser().getMail().equals(userDto.getMail()) || userDto.getRole().equals(RoleType.ROLE_ADMINISTRATEUR)){
             deleteImageFromFolder(imageEntity);
