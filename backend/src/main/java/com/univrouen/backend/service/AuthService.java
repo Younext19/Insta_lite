@@ -1,5 +1,5 @@
 package com.univrouen.backend.service;
-import com.univrouen.backend.RoleType;
+import com.univrouen.backend.config.CONSTANT.RoleType;
 
 import com.univrouen.backend.config.mapper.UserMapper;
 import com.univrouen.backend.config.RequestConfig.RegisterRequest;
@@ -32,13 +32,10 @@ public class AuthService {
     private AuthRepository authRepository;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-
     @Autowired
     private JwtService jwtService;
-
     @Autowired
     private UserService userService;
-
     @Autowired
     private RefreshTokenService refreshTokenService;
 

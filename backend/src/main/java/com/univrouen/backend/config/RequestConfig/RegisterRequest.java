@@ -1,7 +1,7 @@
 package com.univrouen.backend.config.RequestConfig;
 
 
-import com.univrouen.backend.RoleType;
+import com.univrouen.backend.config.CONSTANT.RoleType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;

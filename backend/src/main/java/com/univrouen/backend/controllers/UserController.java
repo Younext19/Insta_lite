@@ -50,7 +50,6 @@ public class UserController {
 
 
     //U
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMINISTRATEUR')")
     @PatchMapping("/update/{id}")
     public ResponseEntity<UserResponseBody> updateUser(@PathVariable Long id,@RequestBody RegisterRequest userDtoRequest){
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.updateUser(id,userDtoRequest));

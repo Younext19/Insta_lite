@@ -1,6 +1,4 @@
 package com.univrouen.backend.security;
-import com.univrouen.backend.RoleType;
-import com.univrouen.backend.config.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,6 +48,7 @@ public class ConfigurationSecurityApplication{
                                                 .requestMatchers(POST,"/inscription").permitAll()
                                                 .requestMatchers(POST,"/connexion").permitAll()
                                                 .requestMatchers(POST,"/refresh-token").permitAll()
+                                                .requestMatchers(GET,"/images").permitAll()
                                                 .anyRequest().authenticated()
                         )
                         .sessionManagement(httpSecuritySessionManagementConfigurer ->

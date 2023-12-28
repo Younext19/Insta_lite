@@ -1,5 +1,7 @@
 package com.univrouen.backend.controllers;
+import com.univrouen.backend.exception.ImageNotFoundException;
 import com.univrouen.backend.exception.InstaException;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +43,17 @@ public class ApplicationControllerAdvice {
         return problemDetail;
     }
 
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(value = ExpiredJwtException.class)
+    public @ResponseBody ProblemDetail jwtException(ExpiredJwtException expiredJwtException){
+        final ProblemDetail problemDetail =  ProblemDetail.forStatusAndDetail(
+                HttpStatus.UNAUTHORIZED,"Token non valide"
+        );
+        problemDetail.setProperty("erreur","Le token que vous avez saisie n'est plus valide");
+        return problemDetail;
+    }
+
+
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(value = AccessDeniedException.class)
     public @ResponseBody ProblemDetail accessDeniedException(AccessDeniedException accessDeniedException){
@@ -63,9 +76,16 @@ public class ApplicationControllerAdvice {
         return problemDetail;
     }
 
-
-
-
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ImageNotFoundException.class)
+    public @ResponseBody ProblemDetail handleException(
+            ImageNotFoundException e) {
+        final ProblemDetail problemDetail =  ProblemDetail.forStatusAndDetail(
+                HttpStatus.NOT_FOUND,"la ressource n'a pas été trouvé"
+        );
+        problemDetail.setProperty("erreur",e.getMessage());
+        return problemDetail;
+    }
 
 
 }

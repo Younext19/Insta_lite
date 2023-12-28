@@ -101,6 +101,11 @@
             <artifactId>spring-boot-buildpack-platform</artifactId>
             <version>3.1.5</version>
         </dependency>
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-core</artifactId>
+			<version>1.26</version> <!-- ou vérifiez la dernière version -->
+		</dependency>
 
 
     </dependencies>
