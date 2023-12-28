@@ -17,7 +17,7 @@ export default function Users() {
   const [editUserModal, setEditUserModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState({});
   const token =
-    "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDM2MzY2ODUsImZ1bGxuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbkBhZG1pbi5mcnIifQ.hiOohE2ed5xzeqycdRNd0R9IX_vFu9CZabxQXsPif0w";
+    "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDM2NDA2MDQsImZ1bGxuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbkBhZG1pbi5mcnIifQ._LpIE7ewCWL0deA6ujsMeOnjzOS2Us3zx9R7M9OvJtk";
   useEffect(() => {
     getUsers(token).then((data) => setUserData(data));
   }, []);
@@ -28,6 +28,9 @@ export default function Users() {
       setDeleteUserModal(false);
       getUsers(token).then((data) => setUserData(data));
     });
+  };
+  const addUserFunc = () => {
+    console.log("add");
   };
   return (
     <div className="userContent">
@@ -56,33 +59,39 @@ export default function Users() {
             <th>Actions</th>
           </tr>
         </thead>
-        {userData?.map((user, index) => (
-          <tr key={index}>
-            <td>{user.fullname ? user.fullname : "N/A"}</td>
-            <td>{user.pseudo ? user.pseudo : "N/A"}</td>
-            <td>{user.mail}</td>
-            <td>{user.role}</td>
-            <td>
-              <div className="actionsContainer">
-                <div
-                  className="editIcon"
-                  onClick={() => setEditUserModal(true)}
-                >
-                  <PencilIcon size={24} />
+        {userData?.length > 0 ? (
+          userData?.map((user, index) => (
+            <tr key={index}>
+              <td>{user.fullname ? user.fullname : "N/A"}</td>
+              <td>{user.pseudo ? user.pseudo : "N/A"}</td>
+              <td>{user.mail}</td>
+              <td>{user.role}</td>
+              <td>
+                <div className="actionsContainer">
+                  <div
+                    className="editIcon"
+                    onClick={() => setEditUserModal(true)}
+                  >
+                    <PencilIcon size={24} />
+                  </div>
+                  <div
+                    className="deleteIcon"
+                    onClick={() => {
+                      setDeleteUserModal(true);
+                      setSelectedUser(user);
+                    }}
+                  >
+                    <TrashIcon size={24} />
+                  </div>
                 </div>
-                <div
-                  className="deleteIcon"
-                  onClick={() => {
-                    setDeleteUserModal(true);
-                    setSelectedUser(user);
-                  }}
-                >
-                  <TrashIcon size={24} />
-                </div>
-              </div>
-            </td>
+              </td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="5">No users found</td>
           </tr>
-        ))}
+        )}
       </table>
       <DeleteUserModal
         showModal={deleteUserModal}
