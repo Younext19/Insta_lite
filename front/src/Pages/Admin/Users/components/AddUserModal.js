@@ -3,6 +3,7 @@ import "./AddUserModal.css"; // Import your custom CSS for styling
 import CustomButton from "../../../../components/Button/CustomButton";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { addUser } from "../../../../api/users";
 
 const UserSchema = Yup.object().shape({
   fullName: Yup.string().required("Full Name is required"),
@@ -18,6 +19,7 @@ const AddUserModal = ({ showModal, handleClose }) => {
       email: "",
       pseudo: "",
       role: "utilisateur",
+      hasPrivileges: false,
     },
     validationSchema: UserSchema,
     onSubmit: async (values, { resetForm }) => {
@@ -36,6 +38,20 @@ const AddUserModal = ({ showModal, handleClose }) => {
   if (!showModal) {
     return null; // Don't render anything if the modal is not visible
   }
+  const addUsr = () => {
+    console.log("add");
+    const data = {
+      fullName: formik.values.fullName,
+      email: formik.values.email,
+      pseudo: formik.values.pseudo,
+      role: formik.values.role,
+      password: "Password123+",
+      hasPrivileges: formik.values.hasPrivileges,
+    };
+    addUser(data).then((data) => {
+      console.log(data);
+    });
+  };
 
   return (
     <div className={`modal ${showModal ? "show" : ""}`} onClick={handleClose}>
@@ -84,14 +100,25 @@ const AddUserModal = ({ showModal, handleClose }) => {
             onBlur={formik.handleBlur}
             required
           >
-            <option value="utilisateur">Utilisateur Normal</option>
-            <option value="administrateur">Administrateur</option>
-            <option value="utilisateur_privilege">
-              Utilisateur avec Privilège
-            </option>
+            <option value="ROLE_UTILISATEUR">Utilisateur Normal</option>
+            <option value="ROLE_ADMINISTRATEUR">Administrateur</option>
           </select>
+          {/** Has priviliege cehckbox */}
+          <div className="hasPrivileges">
+            <label htmlFor="hasPrivileges">
+              Un utilisateur avec des privilege
+            </label>
+            <input
+              type="checkbox"
+              id="hasPrivileges"
+              name="hasPrivileges"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.hasPriviliege}
+            />
+          </div>
 
-          <CustomButton text={"Ajouter"} type="submit" />
+          <CustomButton text={"Ajouter"} type="submit" onClick={addUsr} />
         </form>
       </div>
     </div>

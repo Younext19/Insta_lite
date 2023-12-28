@@ -17,7 +17,7 @@ export default function Users() {
   const [editUserModal, setEditUserModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState({});
   const token =
-    "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDM2NDA2MDQsImZ1bGxuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbkBhZG1pbi5mcnIifQ._LpIE7ewCWL0deA6ujsMeOnjzOS2Us3zx9R7M9OvJtk";
+    "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDM3NjUyMzcsInN1YiI6ImFkbWluQGFkbWluLmZyciIsImZ1bGxuYW1lIjoiYWRtaW4ifQ.NCidSSCJ20gzFpipMc_8tq4VeyFw91uf5vK1yjeos1c";
   useEffect(() => {
     getUsers(token).then((data) => setUserData(data));
   }, []);
