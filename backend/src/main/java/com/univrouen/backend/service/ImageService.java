@@ -158,11 +158,9 @@ public class ImageService {
 
 
 
-    public ImageResponse getImageById(int id) {
-        ImageEntity image = this.imageRepository.findById((id)).orElseThrow(()->
-                new UsernameNotFoundException("Image with id  =  " + id + "does not exist")
-
-        );
+    public ImageResponse getImageByName(String name) {
+        ImageEntity image = this.imageRepository.findByOriginName(name)
+                .orElseThrow(() -> new ImageNotFoundException("L'image " + name + " n'existe pas ou une erreur dans le chargement "));
         return imageMapper.toImageResponse(image);
     }
 

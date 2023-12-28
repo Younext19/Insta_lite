@@ -29,6 +29,7 @@ public class ImageController {
 
 
     //C
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMINISTRATEUR')")
     @PostMapping("/upload")
     public ResponseEntity<ImageResponse> upload(@RequestParam("image") MultipartFile image,@RequestParam("title") String title,
                                                 @RequestParam("isPrivate") boolean isPrivate) throws IOException {
@@ -41,9 +42,9 @@ public class ImageController {
         return ResponseEntity.status(HttpStatus.OK).body(this.imageService.getAllImages());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ImageResponse> getUserById(@PathVariable int id){
-        return ResponseEntity.status(HttpStatus.OK).body(this.imageService.getImageById(id));
+    @GetMapping("/{name}")
+    public ResponseEntity<ImageResponse> getImageByName(@PathVariable String name){
+        return ResponseEntity.status(HttpStatus.OK).body(this.imageService.getImageByName(name));
     }
 
     //U
