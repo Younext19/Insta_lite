@@ -10,6 +10,8 @@ import idCard from "../../../assets/id-card.png";
 import visible from "../../../assets/visible.png";
 import hide from "../../../assets/hide.png";
 import { signup } from "../../../api/auth";
+import { useNavigate } from "react-router-dom";
+import { LOGIN } from "../../../utils/routes";
 
 const SignupSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -22,6 +24,8 @@ const SignupSchema = Yup.object().shape({
 });
 
 export default function Signup() {
+  const navigate = useNavigate();
+
   const [validFormStyle, setValidFormStyle] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
@@ -54,8 +58,7 @@ export default function Signup() {
 
     signup(userData)
       .then((res) => {
-        // TODO: set token in localstorage & set user in jotai
-        console.log(res);
+        navigate(LOGIN);
       })
       .catch((err) => {
         console.log(err);
