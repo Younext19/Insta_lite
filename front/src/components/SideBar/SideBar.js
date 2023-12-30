@@ -1,44 +1,80 @@
 // Navbar.js
 
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./SideBar.css";
 import CustomButton from "../Button/CustomButton";
+import {
+  FEED,
+  HOME,
+  LOGIN,
+  POSTS,
+  PROFILE,
+  USERS,
+} from "../../utils/routes";
 
-const SideBar = ({ userRole }) => {
-  const adminLinks = [
-    { to: "/home", label: "Accueil" },
-    { to: "/feed", label: "Publications" },
-    { to: "/posts", label: "Gestion des publications" },
-    { to: "/users", label: "Gestion des utilisateurs" },
-  ];
+const SideBar = () => {
+  const navigate = useNavigate();
 
-  const userLinks = [
-    { to: "/home", label: "Home" },
-    { to: "/feed", label: "Feed" },
-    { to: "/profile", label: "Profile" },
-  ];
+  // TODO: in a context / or a jotai store
+  const [userRole, setUserRole] = useState(localStorage.getItem("user-role"));
+  const [token, setToken] = useState(localStorage.getItem("user-token"));
 
-  const links = userRole === "admin" ? adminLinks : userLinks;
+  const adminLinks = useMemo(() => [
+    { to: HOME, label: "Accueil" },
+    { to: FEED, label: "Publications" },
+    { to: POSTS, label: "Gestion des publications" },
+    { to: USERS, label: "Gestion des utilisateurs" },
+  ], []);
 
-  const token = localStorage.getItem("token");
+  const visitorsLinks = useMemo(() => [
+    { to: HOME, label: "Home" },
+    { to: FEED, label: "Feed" },
+  ], []);
+
+
+  const userLinks = useMemo(() => [
+    [...visitorsLinks],
+    { to: PROFILE, label: "Profile" },
+  ], [visitorsLinks]);
+
+  const links = useMemo(
+    () => {
+      if (userRole === "ROLE_ADMINISTRATEUR") {
+        return adminLinks;
+      }
+
+      if (userRole === "ROLE_UTILISATEUR") {
+        return userLinks;
+      }
+
+      return visitorsLinks;
+    },
+    [userRole, adminLinks, userLinks, visitorsLinks]
+  );
 
   const [selectedLink, setSelectedLink] = useState(
     // Retrieve the selected link from localStorage or set the default
     localStorage.getItem("selectedLink") || links[0].to
   );
 
+  const disconnectUser = () => {
+    localStorage.removeItem("user-token");
+    localStorage.removeItem("user-role");
+    setToken(null);
+    setUserRole(null);
+    navigate(HOME);
+  }
+
+  const redirectToLogin = () => {
+    navigate(LOGIN);
+  }
+
   // Update the selected link in localStorage when it changes
   useEffect(() => {
     localStorage.setItem("selectedLink", selectedLink);
   }, [selectedLink]);
 
-  function disconnectUser() {
-    //Vider le cache & go to login
-    console.log("user disconnected");
-    console.log("🚀 ~ file: SideBar.js:25 ~ SideBar ~ token:", token);
-    console.log("zebi");
-  }
   return (
     <nav>
       <ul>
@@ -55,11 +91,22 @@ const SideBar = ({ userRole }) => {
         ))}
       </ul>
       <div className="positionEnd">
-        <CustomButton
-          text={token ? "Se déconnecter" : "S'authentifier"}
-          onClick={disconnectUser}
-          personnalisedWidth={"70%"}
-        />
+        {token
+          ? (
+            <CustomButton
+              text="Se déconnecter"
+              onClick={disconnectUser}
+              personnalisedWidth={"70%"}
+            />
+          )
+          : (
+            <CustomButton
+              text="S'authentifier"
+              onClick={redirectToLogin}
+              personnalisedWidth={"70%"}
+            />
+          )
+        }
       </div>
     </nav>
   );
