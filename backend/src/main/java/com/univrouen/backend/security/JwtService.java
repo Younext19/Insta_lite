@@ -14,15 +14,12 @@ import io.jsonwebtoken.security.Keys;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Key;
-import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.Function;
 
 @Slf4j
@@ -31,31 +28,8 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    public static final String TOKEN_INVALIDE = "Token invalide";
-
     @Autowired
     private UserService userService;
-
-//    public Jwt tokenByValue(String value) {
-//        return this.jwtRepository.findByValueAndDesactiveAndExpire(
-//                value,
-//                false,
-//                false
-//        ).orElseThrow(() -> new RuntimeException("Token invalide ou inconnu"));
-//    }
-
-
-
-//    private void disableTokens(UserDto user) {
-//        final List<Jwt> jwtList = this.jwtRepository.findUser(user.getMail()).peek(
-//                jwt -> {
-//                    jwt.setDesactive(true);
-//                    jwt.setExpire(true);
-//                }
-//        ).collect(Collectors.toList());
-//
-//        this.jwtRepository.saveAll(jwtList);
-//    }
 
 
     public String generate(String username) {

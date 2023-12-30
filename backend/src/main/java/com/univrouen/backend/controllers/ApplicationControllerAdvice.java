@@ -1,6 +1,7 @@
 package com.univrouen.backend.controllers;
 import com.univrouen.backend.exception.ImageNotFoundException;
 import com.univrouen.backend.exception.InstaException;
+import com.univrouen.backend.exception.RefreshTokenException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -86,6 +87,17 @@ public class ApplicationControllerAdvice {
         problemDetail.setProperty("erreur",e.getMessage());
         return problemDetail;
     }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(value = RefreshTokenException.class)
+    public @ResponseBody ProblemDetail jwtException(RefreshTokenException refreshTokenException){
+        final ProblemDetail problemDetail =  ProblemDetail.forStatusAndDetail(
+                HttpStatus.UNAUTHORIZED,"refresh token non valide"
+        );
+        problemDetail.setProperty("erreur",refreshTokenException.getMessage());
+        return problemDetail;
+    }
+
 
 
 }
