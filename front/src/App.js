@@ -38,23 +38,23 @@ const App = () => {
     },
     {
       path: PROFILE,
-      element: <PrivateRoute element={Profile} route={PROFILE} />,
+      element: <PrivateRoute element={<Profile />} route={PROFILE} />,
     },
     {
       path: USERS,
-      element: <PrivateRoute element={Users} route={USERS} />,
+      element: <PrivateRoute element={<Users />} route={USERS} />,
     },
     {
       path: POSTS,
-      element: <PrivateRoute element={Posts} route={POSTS} />,
+      element: <PrivateRoute element={<Posts />} route={POSTS} />,
     },
     {
       path: LOGIN,
-      element: <PrivateRoute element={Login} route={LOGIN} />,
+      element: <PrivateRoute element={<Login />} route={LOGIN} />,
     },
     {
       path: SIGNUP,
-      element: <PrivateRoute element={Signup} route={SIGNUP} />,
+      element: <PrivateRoute element={<Signup />} route={SIGNUP} />,
     },
   ])
 
