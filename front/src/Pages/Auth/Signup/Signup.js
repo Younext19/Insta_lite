@@ -54,6 +54,7 @@ export default function Signup() {
       fullName: formik.values.fullName,
       pseudo: formik.values.username,
       password: formik.values.password,
+      role: "ROLE_UTILISATEUR",
     };
 
     signup(userData)
