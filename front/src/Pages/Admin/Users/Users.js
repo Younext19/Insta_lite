@@ -14,8 +14,7 @@ export default function Users() {
   const [selectedUser, setSelectedUser] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(8); // Number of items per page
-  const token =
-    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5mcnIiLCJmdWxsbmFtZSI6ImFkbWluIiwiZXhwIjoxNzAzODkzNTY0fQ.kgtrUiO-eN2xDb37o9XiIbNqy3lAZ8JTCPGNQdlIkxM";
+  const token = localStorage.getItem("user-token");
 
   useEffect(() => {
     getUsers(token).then((data) => setUserData(data));

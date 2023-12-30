@@ -40,8 +40,8 @@ const AddUserModal = ({ showModal, handleClose }) => {
     return null; // Don't render anything if the modal is not visible
   }
   const addUsr = () => {
-    const token =
-      "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDM4ODkxNDksImZ1bGxuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbkBhZG1pbi5mcnIifQ.rpwdkni8Qsj52LVBGvCJ2keyQsjHQdXQ4CSGT0wMU5A";
+    const token = localStorage.getItem("user-token");
+
     const data = {
       fullname: formik.values.fullName,
       mail: formik.values.email,

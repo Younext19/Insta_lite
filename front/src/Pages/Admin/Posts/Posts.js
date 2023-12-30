@@ -9,8 +9,11 @@ import DisplayModal from "./components/DisplayModal";
 import DeleteModal from "./components/DeleteModal";
 import AddPostModal from "./components/AddPostModal";
 import { getPosts } from "../../../api/posts";
+import { useAtom } from "jotai";
+import { userAtom } from "../../../services/userService";
 
 export default function Posts() {
+  const [user] = useAtom(userAtom);
   const [displayImageModal, setDisplayImageModal] = useState(false);
   const [deletePubModal, setDeletePubModal] = useState(false);
   const [addPubModal, setAddPubModal] = useState(false);
@@ -25,15 +28,13 @@ export default function Posts() {
     console.log("🚀 ~ file: Posts.js:77 ~ addPost ~ postData:", postData);
   }
   useEffect(() => {
-    const token =
-      "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5mcnIiLCJmdWxsbmFtZSI6ImFkbWluIiwiZXhwIjoxNzAzOTMxNTU2fQ.-a3rTVonnlelYlj83Pu0tsb74EpnYdlIFkZoubLFCs0";
-
+    const token = localStorage.getItem("user-token");
     //get data from api
     getPosts(token).then((data) => {
       console.log("🚀 ~ file: Posts.js:30 ~ getPosts ~ data:", data);
       setUserData(data);
     });
-  }, []);
+  }, [user]);
   return (
     <div className="userContent">
       <div className="tableInfo">
