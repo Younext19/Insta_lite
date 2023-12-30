@@ -12,11 +12,13 @@ import {
   PROFILE,
   USERS,
 } from "../../utils/routes";
+import { useAtom } from "jotai";
+import { userAtom } from "../../services/userService";
 
 const SideBar = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useAtom(userAtom);
 
-  // TODO: in a context / or a jotai store
   const [userRole, setUserRole] = useState(localStorage.getItem("user-role"));
   const [token, setToken] = useState(localStorage.getItem("user-token"));
 
@@ -63,6 +65,7 @@ const SideBar = () => {
     localStorage.removeItem("user-role");
     setToken(null);
     setUserRole(null);
+    setUser(null);
     navigate(HOME);
   }
 
@@ -74,6 +77,11 @@ const SideBar = () => {
   useEffect(() => {
     localStorage.setItem("selectedLink", selectedLink);
   }, [selectedLink]);
+
+  useEffect(() => {
+    setToken(localStorage.getItem("user-token"));
+    setUserRole(localStorage.getItem("user-role"));
+  }, [user]);
 
   return (
     <nav>
