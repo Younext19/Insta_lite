@@ -4,6 +4,7 @@ package com.univrouen.backend.controllers;
 import com.univrouen.backend.config.FileTypeDetector;
 import com.univrouen.backend.config.ResponseConfig.ImageResponse;
 import com.univrouen.backend.service.ImageService;
+import org.apache.commons.io.FileUtils;
 import org.springframework.core.io.Resource;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
+import java.util.Base64;
 import java.util.List;
 
 
@@ -69,7 +71,7 @@ public class ImageController {
 
 
     @GetMapping("/download/{name}")
-    public ResponseEntity<Resource> downloadByName(@PathVariable String name) throws Exception {
+    public ResponseEntity<String> downloadByName(@PathVariable String name) throws Exception {
         Resource image = imageService.downloadByName(name);
         String mimeType;
         try {
@@ -78,10 +80,9 @@ public class ImageController {
             throw new RuntimeException("Impossible de determiner le type du fichier " + name);
         }
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.valueOf(mimeType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + image.getFilename() + "\"")
-                .body(image);
+        byte[] fileContent = FileUtils.readFileToByteArray(image.getFile());
+
+        return ResponseEntity.ok(Base64.getEncoder().encodeToString(fileContent));
     }
 }
 
