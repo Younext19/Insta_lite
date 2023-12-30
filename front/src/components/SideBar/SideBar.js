@@ -1,7 +1,7 @@
 // Navbar.js
 
 import React, { useState, useEffect, useMemo } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./SideBar.css";
 import CustomButton from "../Button/CustomButton";
 import {
@@ -17,6 +17,7 @@ import { userAtom } from "../../services/userService";
 
 const SideBar = () => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const [user, setUser] = useAtom(userAtom);
 
   const [userRole, setUserRole] = useState(localStorage.getItem("user-role"));
@@ -55,11 +56,6 @@ const SideBar = () => {
     [userRole, adminLinks, userLinks, visitorsLinks]
   );
 
-  const [selectedLink, setSelectedLink] = useState(
-    // Retrieve the selected link from localStorage or set the default
-    localStorage.getItem("selectedLink") || links[0].to
-  );
-
   const disconnectUser = () => {
     localStorage.removeItem("user-token");
     localStorage.removeItem("user-role");
@@ -73,11 +69,6 @@ const SideBar = () => {
     navigate(LOGIN);
   }
 
-  // Update the selected link in localStorage when it changes
-  useEffect(() => {
-    localStorage.setItem("selectedLink", selectedLink);
-  }, [selectedLink]);
-
   useEffect(() => {
     setToken(localStorage.getItem("user-token"));
     setUserRole(localStorage.getItem("user-role"));
@@ -89,8 +80,7 @@ const SideBar = () => {
         {links.map(({ to, label }) => (
           <li
             key={to}
-            className={selectedLink === to ? "selected" : ""}
-            onClick={() => setSelectedLink(to)}
+            className={pathname === to ? "selected" : ""}
           >
             <Link to={to} className="labelStyle">
               {label}
