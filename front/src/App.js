@@ -23,13 +23,17 @@ const App = () => {
       <div className="contentContainer">
         <Routes>
           <Route element={<Error />} path="*" />
-          <Route element={<Home />} path="/home" />
-          <Route element={<Feed />} path="/feed" />
-          <Route element={<Profile />} path="/profile" />
-          <Route element={<Users />} path="/users" />
+          <Route element={<Home />} path="/home" /> {/** Les trois */}
+          <Route element={<Feed />} path="/feed" /> {/** Les trois */}
+          <Route element={<Profile />} path="/profile" />{" "}
+          {/** Authentifié user */}
+          <Route element={<Users />} path="/users" /> {/** Authentifié admin */}
           <Route element={<Posts />} path="/posts" />
+          {/* Authentifié admin */}
           <Route element={<Login />} path="/login" />
+          {/** login ( non auth) */}
           <Route element={<Signup />} path="/signup" />
+          {/** signup ( non auth) */}
         </Routes>
       </div>
     </div>
