@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "../components/Table/Table";
 
 import "./Posts.css";
@@ -8,66 +8,14 @@ import { EyeIcon, PencilIcon, TrashIcon } from "@primer/octicons-react";
 import DisplayModal from "./components/DisplayModal";
 import DeleteModal from "./components/DeleteModal";
 import AddPostModal from "./components/AddPostModal";
-const userData = [
-  {
-    id: "randomdazm",
-    imageUrl: "https://picsum.photos/200",
-    title: "this is a post title not  same  as insta",
-    totalLikes: 20,
-    isPrivate: true,
-    comments: [
-      {
-        username: "ilyes",
-        content: "this is a comment",
-        userImg: "https://picsum.photos/200",
-      },
-    ],
-  },
-  {
-    id: "randomdazdm",
-    imageUrl: "https://picsum.photos/200",
-    title: "this is a post ",
-    totalLikes: 20,
-    isPrivate: false,
-    comments: [
-      {
-        username: "ilyes",
-        content: "this is a comment",
-        userImg: "https://picsum.photos/200",
-      },
-      {
-        username: "ilyes",
-        content: "this is a comment",
-        userImg: "https://picsum.photos/200",
-      },
-      {
-        username: "zeb",
-        content: "this is a comment",
-        userImg: "https://picsum.photos/200",
-      },
-      {
-        username: "ilyes",
-        content: "this is a comment",
-        userImg: "https://picsum.photos/200",
-      },
-      {
-        username: "ilyes",
-        content: "this is a comment",
-        userImg: "https://picsum.photos/200",
-      },
-      {
-        username: "fafaf",
-        content: "this is a comment",
-        userImg: "https://picsum.photos/200",
-      },
-    ],
-  },
-];
+import { getPosts } from "../../../api/posts";
+
 export default function Posts() {
   const [displayImageModal, setDisplayImageModal] = useState(false);
   const [deletePubModal, setDeletePubModal] = useState(false);
   const [addPubModal, setAddPubModal] = useState(false);
   const [selectedPost, setSelectedPost] = useState({});
+  const [userData, setUserData] = useState([]);
   function deletePost() {
     setDeletePubModal(false);
 
@@ -76,6 +24,16 @@ export default function Posts() {
   function addPost(postData) {
     console.log("🚀 ~ file: Posts.js:77 ~ addPost ~ postData:", postData);
   }
+  useEffect(() => {
+    const token =
+      "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5mcnIiLCJmdWxsbmFtZSI6ImFkbWluIiwiZXhwIjoxNzAzOTMxNTU2fQ.-a3rTVonnlelYlj83Pu0tsb74EpnYdlIFkZoubLFCs0";
+
+    //get data from api
+    getPosts(token).then((data) => {
+      console.log("🚀 ~ file: Posts.js:30 ~ getPosts ~ data:", data);
+      setUserData(data);
+    });
+  }, []);
   return (
     <div className="userContent">
       <div className="tableInfo">
@@ -99,7 +57,7 @@ export default function Posts() {
             <th>Actions</th>
           </tr>
         </thead>
-        {userData.map((user, index) => (
+        {userData?.map((user, index) => (
           <tr key={index}>
             <td>
               {user.title.length > 30

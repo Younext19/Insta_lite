@@ -2,10 +2,14 @@ import axios from "axios";
 
 let apiUrl = "http://localhost:8082/";
 
-// get posts
-export const getPosts = async () => {
+// get posts with token on /images
+export const getPosts = async (token) => {
   try {
-    const response = await axios.get(`${apiUrl}posts`);
+    const response = await axios.get(`${apiUrl}images`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error(error);
@@ -16,6 +20,34 @@ export const getPosts = async () => {
 export const deletePost = async (id) => {
   try {
     const response = await axios.delete(`${apiUrl}posts/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+//add post with image form data and token of admin only
+export const addPost = async (formData, token) => {
+  try {
+    const response = await axios.post(`${apiUrl}posts`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getImagePost = async (name, token) => {
+  console.log("🚀 ~ file: posts.js:44 ~ getImagePost ~ token:", token);
+  try {
+    const response = await axios.get(`${apiUrl}images/download/${name}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error(error);

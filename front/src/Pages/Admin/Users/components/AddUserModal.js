@@ -10,6 +10,7 @@ const UserSchema = Yup.object().shape({
   email: Yup.string().required("Invalid email").required("Email is required"),
   pseudo: Yup.string().required("Password is required"),
   role: Yup.string().required("Role is required"),
+  password: Yup.string().required("Password is required"),
 });
 
 const AddUserModal = ({ showModal, handleClose }) => {
@@ -18,8 +19,8 @@ const AddUserModal = ({ showModal, handleClose }) => {
       fullName: "",
       email: "",
       pseudo: "",
-      role: "utilisateur",
-      hasPrivileges: false,
+      role: "ROLE_UTILISATEUR",
+      password: "",
     },
     validationSchema: UserSchema,
     onSubmit: async (values, { resetForm }) => {
@@ -39,18 +40,17 @@ const AddUserModal = ({ showModal, handleClose }) => {
     return null; // Don't render anything if the modal is not visible
   }
   const addUsr = () => {
-    console.log("add");
+    const token =
+      "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDM4ODkxNDksImZ1bGxuYW1lIjoiYWRtaW4iLCJzdWIiOiJhZG1pbkBhZG1pbi5mcnIifQ.rpwdkni8Qsj52LVBGvCJ2keyQsjHQdXQ4CSGT0wMU5A";
     const data = {
-      fullName: formik.values.fullName,
-      email: formik.values.email,
+      fullname: formik.values.fullName,
+      mail: formik.values.email,
       pseudo: formik.values.pseudo,
       role: formik.values.role,
-      password: "Password123+",
+      password: formik.values.password,
       hasPrivileges: formik.values.hasPrivileges,
     };
-    addUser(data).then((data) => {
-      console.log(data);
-    });
+    addUser(token, data);
   };
 
   return (
@@ -90,6 +90,16 @@ const AddUserModal = ({ showModal, handleClose }) => {
             id="email"
             required
           />
+          <label htmlFor="password">Mot de passe:</label>
+          <input
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            name="password"
+            onBlur={formik.handleBlur}
+            type="text"
+            id="password"
+            required
+          />
 
           <label htmlFor="role">Role:</label>
           <select
@@ -118,7 +128,7 @@ const AddUserModal = ({ showModal, handleClose }) => {
             />
           </div>
 
-          <CustomButton text={"Ajouter"} type="submit" onClick={addUsr} />
+          <CustomButton text={"Ajouter"} onClick={addUsr} />
         </form>
       </div>
     </div>
