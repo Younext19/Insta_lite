@@ -54,6 +54,7 @@ export default function Signup() {
 
     signup(userData)
       .then((res) => {
+        // TODO: set token in localstorage & set user in jotai
         console.log(res);
       })
       .catch((err) => {

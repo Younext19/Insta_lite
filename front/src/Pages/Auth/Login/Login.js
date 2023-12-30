@@ -31,9 +31,10 @@ export default function Login() {
     };
     login(loginData)
       .then((res) => {
-        console.log(res);
         // save token to local storage
-        localStorage.setItem("token", res.data.token);
+        // TODO: set item in jotai store
+        localStorage.setItem("user-token", res.data.access_token);
+        localStorage.setItem("user-role", res.data.role);
       })
       .catch((err) => {
         console.log(err);
