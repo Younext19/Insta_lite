@@ -113,7 +113,7 @@ public class ApplicationControllerAdvice {
     @ExceptionHandler(value = SignUpException.class)
     public @ResponseBody ProblemDetail jwtException(SignUpException signUpException){
         final ProblemDetail problemDetail =  ProblemDetail.forStatusAndDetail(
-                HttpStatus.BAD_REQUEST,"mot de passe n'est pas bien formé"
+                HttpStatus.BAD_REQUEST,"les informations ne sont pas correctement formées"
         );
         problemDetail.setProperty("erreur",signUpException.getMessage());
         return problemDetail;
