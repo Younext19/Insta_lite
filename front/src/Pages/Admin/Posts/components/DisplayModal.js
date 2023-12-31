@@ -21,6 +21,12 @@ const DisplayModal = ({ showModal, closeModal, userData }) => {
   if (!showModal) {
     return null; // Don't render anything if the modal is not visible
   }
+  const downloadBase64File = (base64Data, filename) => {
+    const downloadLink = document.createElement("a");
+    downloadLink.href = base64Data;
+    downloadLink.download = filename;
+    downloadLink.click();
+  };
   return (
     <div className={`modal ${showModal ? "show" : ""}`} onClick={closeModal}>
       <div className="modal-content" onClick={(res) => res.stopPropagation()}>
@@ -44,6 +50,9 @@ const DisplayModal = ({ showModal, closeModal, userData }) => {
               </div>
             ))}
           </div>
+          <button onClick={() => downloadBase64File(IMG, "IMG")}>
+            Download
+          </button>
         </div>
       </div>
     </div>

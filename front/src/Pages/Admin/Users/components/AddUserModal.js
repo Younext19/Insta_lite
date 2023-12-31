@@ -43,7 +43,9 @@ const AddUserModal = ({ showModal, handleClose }) => {
       password: formik.values.password,
       hasPrivileges: formik.values.hasPrivileges,
     };
-    addUser(token, data);
+    addUser(token, data).then((res) => {
+      window.location.reload();
+    });
   };
 
   return (
