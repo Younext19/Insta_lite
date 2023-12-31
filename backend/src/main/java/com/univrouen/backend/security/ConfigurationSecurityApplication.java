@@ -48,7 +48,7 @@ public class ConfigurationSecurityApplication{
                                                 .requestMatchers(POST,"/inscription").permitAll()
                                                 .requestMatchers(POST,"/connexion").permitAll()
                                                 .requestMatchers(POST,"/refresh-token").permitAll()
-                                                .requestMatchers(GET,"/images").permitAll()
+                                                .requestMatchers(GET,"/images/download/**").permitAll()
                                                 .anyRequest().authenticated()
                         )
                         .sessionManagement(httpSecuritySessionManagementConfigurer ->
