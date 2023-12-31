@@ -12,14 +12,12 @@ const DisplayModal = ({ showModal, closeModal, userData }) => {
       if (data) {
         handleData(data);
       }
-      console.log("🚀 ~ file: DisplayModal.js:16 ~ ).then ~ data:", data);
     });
   }, [userData.originName]);
   const handleData = (data) => {
     const dataUrl = `data:image/png;base64,${data}`;
     setIMG(dataUrl);
   };
-  console.log("🚀 ~ file: DisplayModal.js:4 ~ DisplayModal ~ userData:", IMG);
   if (!showModal) {
     return null; // Don't render anything if the modal is not visible
   }

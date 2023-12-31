@@ -35,7 +35,6 @@ export default function Feed() {
       });
     } else {
       getPostsAnonyme().then((data) => {
-        console.log("🚀 ~ file: Posts.js:30 ~ getPosts ~ data:", data);
         const modifiedData = [];
 
         // Use Promise.all to wait for all getImagePost requests to complete
@@ -43,10 +42,6 @@ export default function Feed() {
           Promise.all(
             data.map((post) =>
               getImagePostAnonyme(post.originName).then((imageData) => {
-                console.log(
-                  "🚀 ~ file: Feed.js:45 ~ getImagePostAnonyme ~ imageData:",
-                  imageData
-                );
                 // Modify the post object and push it to the array
                 modifiedData.push({ ...post, image: imageData });
               })
@@ -65,7 +60,6 @@ export default function Feed() {
       {dataa?.map((res) => {
         const dataUrl = `data:image/png;base64,${res.image}`;
 
-        console.log(res);
         return (
           <div className="post" key={res.originName}>
             <div className="postHeader">

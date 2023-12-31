@@ -48,7 +48,6 @@ export default function Signup() {
   }, [formik.isValid]);
   // on submit
   const onSubmit = () => {
-    console.log("Form submitted:", formik.values);
     const userData = {
       mail: formik.values.email,
       fullname: formik.values.fullName,
@@ -61,9 +60,7 @@ export default function Signup() {
       .then((res) => {
         navigate(LOGIN);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
     // Add your registration logic here
   };
 
@@ -152,13 +149,7 @@ export default function Signup() {
         <a className="submitButton" onClick={onSubmit}>
           Créer un compte
         </a>
-        <a
-          className="alreadyHaveAnAccount"
-          onClick={() => {
-            console.log("redirect to /signup");
-          }}
-          href="login"
-        >
+        <a className="alreadyHaveAnAccount" onClick={() => {}} href="login">
           Se connecter à un compte existant
         </a>
       </div>

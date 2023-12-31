@@ -4,6 +4,9 @@ import React from "react";
 import "./Home.css";
 import illustration from "../../assets/illustration.png";
 import CustomButton from "../../components/Button/CustomButton";
+import { Navigate } from "react-router-dom";
+import { HOME } from "../../utils/routes";
+
 const Home = () => {
   return (
     <div className="homeContainer">
@@ -15,7 +18,7 @@ const Home = () => {
           effortlessly. Explore a vibrant feed, connect with friends, and
           express yourself with likes and comments.
         </p>
-        <CustomButton text={"Get Started"} onClick={() => console.log("hi")} />
+        <CustomButton text={"Get Started"} onClick={() => Navigate(HOME)} />
       </div>
       {/* Add your content here */}
     </div>

@@ -35,7 +35,6 @@ export const deletePost = async (id) => {
 };
 
 export const getImagePost = async (name, token) => {
-  console.log("🚀 ~ file: posts.js:44 ~ getImagePost ~ token:", token);
   try {
     const response = await axios.get(`${apiUrl}images/download/${name}`, {
       headers: {
@@ -70,7 +69,6 @@ export const deletePostImage = async (name, token) => {
 
 // add post with form data on url /images/upload
 export const addPost = async (token, formData) => {
-  console.log("🚀 ~ file: posts.js:58 ~ addPost ~ token:", token);
   try {
     const response = await axios.post(`${apiUrl}images/upload`, formData, {
       headers: {

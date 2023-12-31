@@ -24,13 +24,6 @@ const AddUserModal = ({ showModal, handleClose }) => {
     },
     validationSchema: UserSchema,
     onSubmit: async (values, { resetForm }) => {
-      console.log("Form submitted:", values);
-      // Add your login logic here
-
-      // Assuming some asynchronous logic is being performed (e.g., API request)
-      // await yourAsyncSubmitFunction(values);
-
-      // Reset the form to its initial values
       handleClose();
       resetForm();
     },

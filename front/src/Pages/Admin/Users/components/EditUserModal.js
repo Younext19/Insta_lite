@@ -12,10 +12,6 @@ const UserSchema = Yup.object().shape({
 });
 
 const EditUserModal = ({ showModal, handleClose, userData }) => {
-  console.log(
-    "🚀 ~ file: EditUserModal.js:17 ~ EditUserModal ~ userData:",
-    userData
-  );
   const token = localStorage.getItem("user-token");
   const formik = useFormik({
     initialValues: {
@@ -27,13 +23,6 @@ const EditUserModal = ({ showModal, handleClose, userData }) => {
     },
     validationSchema: UserSchema,
     onSubmit: async (values, { resetForm }) => {
-      console.log("Form submitted:", values);
-      // Add your edit logic here
-
-      // Assuming some asynchronous logic is being performed (e.g., API request)
-      // await yourAsyncEditFunction(values);
-
-      // Reset the form to its initial values
       handleClose();
       resetForm();
     },
