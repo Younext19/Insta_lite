@@ -4,6 +4,8 @@ package com.univrouen.backend.security;
 import com.univrouen.backend.config.CONSTANT.Constant;
 import com.univrouen.backend.service.AuthService;
 import com.univrouen.backend.service.UserService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -51,8 +53,11 @@ public class JwtFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
             filterChain.doFilter(request, response);
-        } catch (Exception exception){
-            log.info("hhahhhadjsjocùnc");
+        } catch (SignatureException exception){
+            handlerExceptionResolver.resolveException(request,response,null,exception);
+        } catch (MalformedJwtException exception){
+            handlerExceptionResolver.resolveException(request,response,null,exception);
+        } catch (ExpiredJwtException exception){
             handlerExceptionResolver.resolveException(request,response,null,exception);
         }
 

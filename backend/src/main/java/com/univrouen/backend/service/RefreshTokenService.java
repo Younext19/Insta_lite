@@ -39,7 +39,7 @@ public class RefreshTokenService {
                 .token(UUID.randomUUID().toString())
                 .revoked(false)
                 .user(userDto)
-                .expiryDate(Instant.now().plusMillis(30 *60 *1000))
+                .expiryDate(Instant.now().plusMillis(30 *600 *1000))
                 .build();
         return this.refreshTokenRepository.save(refreshToken);
     }

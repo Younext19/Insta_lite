@@ -35,8 +35,18 @@ public class ApplicationControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler(value = {SignatureException.class, MalformedJwtException.class})
-    public @ResponseBody ProblemDetail jwtException(Exception signatureException){
+    @ExceptionHandler(value = SignatureException.class)
+    public @ResponseBody ProblemDetail jwtException(SignatureException signatureException){
+        final ProblemDetail problemDetail =  ProblemDetail.forStatusAndDetail(
+                HttpStatus.UNAUTHORIZED,"Token non valide"
+        );
+        problemDetail.setProperty("erreur","nous n'avons pas pu vérifié votre jwt");
+        return problemDetail;
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(value = MalformedJwtException.class)
+    public @ResponseBody ProblemDetail jwtException(MalformedJwtException malformedJwtException){
         final ProblemDetail problemDetail =  ProblemDetail.forStatusAndDetail(
                 HttpStatus.UNAUTHORIZED,"Token non valide"
         );
