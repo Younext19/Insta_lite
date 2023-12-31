@@ -21,7 +21,6 @@ export default function Users() {
   }, [token]);
 
   const deleteUserFunc = () => {
-    console.log("delete");
     deleteUser(token, selectedUser.id).then(() => {
       setDeleteUserModal(false);
       getUsers(token).then((data) => setUserData(data));

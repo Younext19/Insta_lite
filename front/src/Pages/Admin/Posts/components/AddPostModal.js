@@ -35,7 +35,6 @@ const AddPostModal = ({ showModal, closeModal }) => {
     formData.append("isPrivate", formik.values.private);
 
     addPost(token, formData).then((res) => {
-      console.log("🚀 ~ file: AddPostModal.js:66 ~ addPost ~ res", res);
       closeModal();
     });
   };

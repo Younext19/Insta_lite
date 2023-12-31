@@ -31,7 +31,6 @@ export default function Login() {
   });
 
   const onSubmit = () => {
-    console.log("Form submitted:", formik.values);
     const loginData = {
       username: formik.values.mail,
       password: formik.values.password,
@@ -44,9 +43,7 @@ export default function Login() {
         setUser(res.data);
         navigate(HOME);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   return (

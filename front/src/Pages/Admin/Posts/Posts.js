@@ -19,22 +19,16 @@ export default function Posts() {
   const [userData, setUserData] = useState([]);
   const token = localStorage.getItem("user-token");
   function deletePost() {
-    console.log("🚀 ~ file: Posts.js:65 ~ deletePost ~ deletePost");
     setDeletePubModal(false);
-    deletePostImage(selectedPost.originName, token).then((res) => {
-      console.log("🚀 ~ file: Posts.js:67 ~ deletePost ~ res", res);
-    });
+    deletePostImage(selectedPost.originName, token).then((res) => {});
 
     //refresh data ....
   }
-  function addPost(postData) {
-    console.log("🚀 ~ file: Posts.js:77 ~ addPost ~ postData:", postData);
-  }
+
   useEffect(() => {
     const token = localStorage.getItem("user-token");
     //get data from api
     getPosts(token).then((data) => {
-      console.log("🚀 ~ file: Posts.js:30 ~ getPosts ~ data:", data);
       setUserData(data);
     });
   }, [user]);
@@ -113,7 +107,6 @@ export default function Posts() {
       <AddPostModal
         showModal={addPubModal}
         closeModal={() => setAddPubModal(false)}
-        handleAddPost={addPost}
       />
     </div>
   );
