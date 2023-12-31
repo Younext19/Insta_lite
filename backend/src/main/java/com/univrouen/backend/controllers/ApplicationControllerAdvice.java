@@ -2,6 +2,7 @@ package com.univrouen.backend.controllers;
 import com.univrouen.backend.exception.ImageNotFoundException;
 import com.univrouen.backend.exception.InstaException;
 import com.univrouen.backend.exception.RefreshTokenException;
+import com.univrouen.backend.exception.SignUpException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -108,6 +109,15 @@ public class ApplicationControllerAdvice {
         return problemDetail;
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = SignUpException.class)
+    public @ResponseBody ProblemDetail jwtException(SignUpException signUpException){
+        final ProblemDetail problemDetail =  ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_REQUEST,"mot de passe n'est pas bien formé"
+        );
+        problemDetail.setProperty("erreur",signUpException.getMessage());
+        return problemDetail;
+    }
 
 
 }
