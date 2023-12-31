@@ -16,6 +16,7 @@ const EditUserModal = ({ showModal, handleClose, userData }) => {
     "🚀 ~ file: EditUserModal.js:17 ~ EditUserModal ~ userData:",
     userData
   );
+  const token = localStorage.getItem("user-token");
   const formik = useFormik({
     initialValues: {
       fullName: userData.fullname || "",
@@ -55,8 +56,6 @@ const EditUserModal = ({ showModal, handleClose, userData }) => {
   }
 
   const editUsr = () => {
-    const token =
-      "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5mcnIiLCJmdWxsbmFtZSI6ImFkbWluIiwiZXhwIjoxNzAzODkzNTY0fQ.kgtrUiO-eN2xDb37o9XiIbNqy3lAZ8JTCPGNQdlIkxM";
     const data = {
       fullname: formik.values.fullName,
       pseudo: formik.values.pseudo,

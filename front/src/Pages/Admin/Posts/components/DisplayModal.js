@@ -4,16 +4,10 @@ import { getImagePost } from "../../../../api/posts";
 const DisplayModal = ({ showModal, closeModal, userData }) => {
   const [IMG, setIMG] = useState("");
 
-  console.log(
-    "🚀 ~ file: DisplayModal.js:5 ~ DisplayModal ~ userData:",
-    userData.originName
-  );
+  const token = localStorage.getItem("user-token");
 
   useEffect(() => {
-    getImagePost(
-      userData.originName,
-      "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5mcnIiLCJmdWxsbmFtZSI6ImFkbWluIiwiZXhwIjoxNzAzOTQ0OTEwfQ.JcMNwUorYeiHEzJuuh94KBUU967b3tErOJK21yiFv80"
-    ).then((data) => {
+    getImagePost(userData.originName, token).then((data) => {
       setIMG(data);
       if (data) {
         handleData(data);
@@ -22,13 +16,7 @@ const DisplayModal = ({ showModal, closeModal, userData }) => {
     });
   }, [userData.originName]);
   const handleData = (data) => {
-    const imageData = new Uint8Array(data);
-    const binaryString = imageData.reduce(
-      (acc, byte) => acc + String.fromCharCode(byte),
-      ""
-    );
-    const base64 = btoa(binaryString);
-    const dataUrl = `data:image/png;base64,${base64}`;
+    const dataUrl = `data:image/png;base64,${data}`;
     setIMG(dataUrl);
   };
   console.log("🚀 ~ file: DisplayModal.js:4 ~ DisplayModal ~ userData:", IMG);
@@ -39,15 +27,8 @@ const DisplayModal = ({ showModal, closeModal, userData }) => {
     <div className={`modal ${showModal ? "show" : ""}`} onClick={closeModal}>
       <div className="modal-content" onClick={(res) => res.stopPropagation()}>
         <div className="user-post">
-          <img
-            src={
-              "http://localhost:8082/images/download/a113a2a9-7a3d-4776-93fd-4c8d02a91896.png"
-            }
-            alt={`Post ${userData.id}`}
-            className="post-image"
-          />
+          <img src={IMG} alt={`Post ${userData.id}`} className="post-image" />
           <p className="dataTitle">{userData.title}</p>
-          <p>Total Likes: {userData.totalLikes}</p>
           <p>
             Ceci est un publication{userData?.isPrivate ? " privé" : " public"}
           </p>

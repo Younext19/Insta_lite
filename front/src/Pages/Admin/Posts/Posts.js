@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Table from "../components/Table/Table";
 
 import "./Posts.css";
 import CustomButton from "../../../components/Button/CustomButton";
-import CustomModal from "../../../components/Modal/CustomModal";
 import { EyeIcon, PencilIcon, TrashIcon } from "@primer/octicons-react";
 import DisplayModal from "./components/DisplayModal";
 import DeleteModal from "./components/DeleteModal";
 import AddPostModal from "./components/AddPostModal";
-import { getPosts } from "../../../api/posts";
+import { deletePostImage, getPosts, getPostsAnonyme } from "../../../api/posts";
 import { useAtom } from "jotai";
 import { userAtom } from "../../../services/userService";
 
@@ -19,8 +17,13 @@ export default function Posts() {
   const [addPubModal, setAddPubModal] = useState(false);
   const [selectedPost, setSelectedPost] = useState({});
   const [userData, setUserData] = useState([]);
+  const token = localStorage.getItem("user-token");
   function deletePost() {
+    console.log("🚀 ~ file: Posts.js:65 ~ deletePost ~ deletePost");
     setDeletePubModal(false);
+    deletePostImage(selectedPost.originName, token).then((res) => {
+      console.log("🚀 ~ file: Posts.js:67 ~ deletePost ~ res", res);
+    });
 
     //refresh data ....
   }
@@ -45,7 +48,6 @@ export default function Posts() {
         </p>
 
         <div className="tableHeader">
-          <input className="searchInput" placeholder="Search dazdza" />
           <CustomButton text={"Ajouter"} onClick={() => setAddPubModal(true)} />
         </div>
       </div>
@@ -53,48 +55,49 @@ export default function Posts() {
         <thead>
           <tr>
             <th>Titre</th>
-            <th>Total Likes</th>
             <th>Visibilité</th>
             <th>Actions</th>
           </tr>
         </thead>
-        {userData?.map((user, index) => (
-          <tr key={index}>
-            <td>
-              {user.title.length > 30
-                ? user.title.substring(0, 30) + "..."
-                : user.title}
-            </td>
-            <td>{user.totalLikes}</td>
-            <td>{user.isPrivate ? "Privé" : "Public"}</td>
-            <td>
-              <div className="actionsContainer">
-                <div
-                  className="eyeIcon"
-                  onClick={() => {
-                    setDisplayImageModal(true);
-                    setSelectedPost(user);
-                  }}
-                >
-                  <EyeIcon size={24} />
-                </div>
+        {userData.length > 0 ? (
+          userData?.map((user, index) => (
+            <tr key={index}>
+              <td>
+                {user.title.length > 30
+                  ? user.title.substring(0, 30) + "..."
+                  : user.title}
+              </td>
+              <td>{user.isPrivate ? "Privé" : "Public"}</td>
+              <td>
+                <div className="actionsContainer">
+                  <div
+                    className="eyeIcon"
+                    onClick={() => {
+                      setDisplayImageModal(true);
+                      setSelectedPost(user);
+                    }}
+                  >
+                    <EyeIcon size={24} />
+                  </div>
 
-                <div className="editIcon">
-                  <PencilIcon size={24} />
+                  <div
+                    className="deleteIcon"
+                    onClick={() => {
+                      setDeletePubModal(true);
+                      setSelectedPost(user);
+                    }}
+                  >
+                    <TrashIcon size={24} />
+                  </div>
                 </div>
-                <div
-                  className="deleteIcon"
-                  onClick={() => {
-                    setDeletePubModal(true);
-                    setSelectedPost(user);
-                  }}
-                >
-                  <TrashIcon size={24} />
-                </div>
-              </div>
-            </td>
+              </td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="4">No data</td>
           </tr>
-        ))}
+        )}
       </table>
       <DisplayModal
         showModal={displayImageModal}

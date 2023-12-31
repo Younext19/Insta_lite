@@ -15,6 +15,14 @@ export const getPosts = async (token) => {
     console.error(error);
   }
 };
+export const getPostsAnonyme = async () => {
+  try {
+    const response = await axios.get(`${apiUrl}images`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 // delete post
 export const deletePost = async (id) => {
@@ -26,10 +34,30 @@ export const deletePost = async (id) => {
   }
 };
 
-//add post with image form data and token of admin only
-export const addPost = async (formData, token) => {
+export const getImagePost = async (name, token) => {
+  console.log("🚀 ~ file: posts.js:44 ~ getImagePost ~ token:", token);
   try {
-    const response = await axios.post(`${apiUrl}posts`, formData, {
+    const response = await axios.get(`${apiUrl}images/download/${name}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+export const getImagePostAnonyme = async (name) => {
+  try {
+    const response = await axios.get(`${apiUrl}images/download/${name}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+export const deletePostImage = async (name, token) => {
+  try {
+    const response = await axios.delete(`${apiUrl}images/${name}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -40,10 +68,11 @@ export const addPost = async (formData, token) => {
   }
 };
 
-export const getImagePost = async (name, token) => {
-  console.log("🚀 ~ file: posts.js:44 ~ getImagePost ~ token:", token);
+// add post with form data on url /images/upload
+export const addPost = async (token, formData) => {
+  console.log("🚀 ~ file: posts.js:58 ~ addPost ~ token:", token);
   try {
-    const response = await axios.get(`${apiUrl}images/download/${name}`, {
+    const response = await axios.post(`${apiUrl}images/upload`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

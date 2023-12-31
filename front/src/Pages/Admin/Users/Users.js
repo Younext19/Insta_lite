@@ -83,7 +83,6 @@ export default function Users() {
         </p>
 
         <div className="tableHeader">
-          <input className="searchInput" placeholder="Search dazdza" />
           <CustomButton
             text={"Ajouter"}
             onClick={() => setAddUserModal(true)}
