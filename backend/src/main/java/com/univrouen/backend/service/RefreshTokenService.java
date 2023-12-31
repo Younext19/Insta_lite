@@ -4,6 +4,7 @@ import com.univrouen.backend.config.RequestConfig.RefreshTokenRequest;
 import com.univrouen.backend.config.ResponseConfig.RefreshTokenResponse;
 import com.univrouen.backend.entite.RefreshToken;
 import com.univrouen.backend.entite.UserDto;
+import com.univrouen.backend.exception.RefreshTokenException;
 import com.univrouen.backend.repository.RefreshTokenRepository;
 import com.univrouen.backend.repository.UserRepository;
 import com.univrouen.backend.security.JwtService;
@@ -45,14 +46,14 @@ public class RefreshTokenService {
 
     public RefreshTokenResponse refreshToken(RefreshTokenRequest refreshTokenRequest){
         RefreshToken refreshToken = refreshTokenRepository.findByToken(refreshTokenRequest.getRefresh()).orElseThrow(
-                () -> new RuntimeException("le refresh token n'existe pas"));
+                () -> new RefreshTokenException("le refresh token n'existe pas"));
         if(refreshToken ==  null){
-            throw new RuntimeException("le token est null");
+            throw new RefreshTokenException("le token est null");
         }
         Instant nowInstant = Instant.now();
         if(refreshToken.getExpiryDate().isBefore(nowInstant)){
             refreshTokenRepository.delete(refreshToken);
-            throw new RuntimeException("le refresh token est expiré");
+            throw new RefreshTokenException("le refresh token est expiré");
         }
         String newToken =  jwtService.generate(refreshToken.getUser().getMail());
         return

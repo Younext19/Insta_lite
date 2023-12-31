@@ -72,7 +72,7 @@ public class UserService  implements UserDetailsService {
         UserDto userFromBdd = userRepository.findById(Math.toIntExact(id))
                     .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         if(userDto.getMail().equals(userFromBdd.getMail()) || userDto.getRole().equals(RoleType.ROLE_ADMINISTRATEUR)) {
-            if (userRepository.findByMail(userDtoRequest.getMail()).isPresent() && !userDtoRequest.getMail().equals(userDto.getMail())) {
+            if ((userRepository.findByMail(userDtoRequest.getMail()).isPresent()) && !userDtoRequest.getMail().equals(userDto.getMail())) {
                 throw new InstaException("Un utilisateur est déja inscrit avec ce mail  !!");
             }
             if(userDtoRequest.getMail() != null){
