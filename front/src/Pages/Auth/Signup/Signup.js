@@ -51,7 +51,7 @@ export default function Signup() {
     console.log("Form submitted:", formik.values);
     const userData = {
       mail: formik.values.email,
-      fullName: formik.values.fullName,
+      fullname: formik.values.fullName,
       pseudo: formik.values.username,
       password: formik.values.password,
       role: "ROLE_UTILISATEUR",
