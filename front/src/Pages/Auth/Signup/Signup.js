@@ -10,6 +10,8 @@ import idCard from "../../../assets/id-card.png";
 import visible from "../../../assets/visible.png";
 import hide from "../../../assets/hide.png";
 import { signup } from "../../../api/auth";
+import { useNavigate } from "react-router-dom";
+import { LOGIN } from "../../../utils/routes";
 
 const SignupSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -22,6 +24,8 @@ const SignupSchema = Yup.object().shape({
 });
 
 export default function Signup() {
+  const navigate = useNavigate();
+
   const [validFormStyle, setValidFormStyle] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
@@ -50,11 +54,12 @@ export default function Signup() {
       fullName: formik.values.fullName,
       pseudo: formik.values.username,
       password: formik.values.password,
+      role: "ROLE_UTILISATEUR",
     };
 
     signup(userData)
       .then((res) => {
-        console.log(res);
+        navigate(LOGIN);
       })
       .catch((err) => {
         console.log(err);

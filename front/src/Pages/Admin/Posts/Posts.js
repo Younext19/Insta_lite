@@ -1,81 +1,43 @@
-import React, { useState } from "react";
-import Table from "../components/Table/Table";
+import React, { useEffect, useState } from "react";
 
 import "./Posts.css";
 import CustomButton from "../../../components/Button/CustomButton";
-import CustomModal from "../../../components/Modal/CustomModal";
 import { EyeIcon, PencilIcon, TrashIcon } from "@primer/octicons-react";
 import DisplayModal from "./components/DisplayModal";
 import DeleteModal from "./components/DeleteModal";
 import AddPostModal from "./components/AddPostModal";
-const userData = [
-  {
-    id: "randomdazm",
-    imageUrl: "https://picsum.photos/200",
-    title: "this is a post title not  same  as insta",
-    totalLikes: 20,
-    isPrivate: true,
-    comments: [
-      {
-        username: "ilyes",
-        content: "this is a comment",
-        userImg: "https://picsum.photos/200",
-      },
-    ],
-  },
-  {
-    id: "randomdazdm",
-    imageUrl: "https://picsum.photos/200",
-    title: "this is a post ",
-    totalLikes: 20,
-    isPrivate: false,
-    comments: [
-      {
-        username: "ilyes",
-        content: "this is a comment",
-        userImg: "https://picsum.photos/200",
-      },
-      {
-        username: "ilyes",
-        content: "this is a comment",
-        userImg: "https://picsum.photos/200",
-      },
-      {
-        username: "zeb",
-        content: "this is a comment",
-        userImg: "https://picsum.photos/200",
-      },
-      {
-        username: "ilyes",
-        content: "this is a comment",
-        userImg: "https://picsum.photos/200",
-      },
-      {
-        username: "ilyes",
-        content: "this is a comment",
-        userImg: "https://picsum.photos/200",
-      },
-      {
-        username: "fafaf",
-        content: "this is a comment",
-        userImg: "https://picsum.photos/200",
-      },
-    ],
-  },
-];
+import { deletePostImage, getPosts, getPostsAnonyme } from "../../../api/posts";
+import { useAtom } from "jotai";
+import { userAtom } from "../../../services/userService";
+
 export default function Posts() {
+  const [user] = useAtom(userAtom);
   const [displayImageModal, setDisplayImageModal] = useState(false);
   const [deletePubModal, setDeletePubModal] = useState(false);
   const [addPubModal, setAddPubModal] = useState(false);
   const [selectedPost, setSelectedPost] = useState({});
+  const [userData, setUserData] = useState([]);
+  const token = localStorage.getItem("user-token");
   function deletePost() {
+    console.log("🚀 ~ file: Posts.js:65 ~ deletePost ~ deletePost");
     setDeletePubModal(false);
+    deletePostImage(selectedPost.originName, token).then((res) => {
+      console.log("🚀 ~ file: Posts.js:67 ~ deletePost ~ res", res);
+    });
 
     //refresh data ....
   }
   function addPost(postData) {
     console.log("🚀 ~ file: Posts.js:77 ~ addPost ~ postData:", postData);
   }
+  useEffect(() => {
+    const token = localStorage.getItem("user-token");
+    //get data from api
+    getPosts(token).then((data) => {
+      console.log("🚀 ~ file: Posts.js:30 ~ getPosts ~ data:", data);
+      setUserData(data);
+    });
+  }, [user]);
   return (
     <div className="userContent">
       <div className="tableInfo">
@@ -86,7 +48,6 @@ export default function Posts() {
         </p>
 
         <div className="tableHeader">
-          <input className="searchInput" placeholder="Search dazdza" />
           <CustomButton text={"Ajouter"} onClick={() => setAddPubModal(true)} />
         </div>
       </div>
@@ -94,48 +55,49 @@ export default function Posts() {
         <thead>
           <tr>
             <th>Titre</th>
-            <th>Total Likes</th>
             <th>Visibilité</th>
             <th>Actions</th>
           </tr>
         </thead>
-        {userData.map((user, index) => (
-          <tr key={index}>
-            <td>
-              {user.title.length > 30
-                ? user.title.substring(0, 30) + "..."
-                : user.title}
-            </td>
-            <td>{user.totalLikes}</td>
-            <td>{user.isPrivate ? "Privé" : "Public"}</td>
-            <td>
-              <div className="actionsContainer">
-                <div
-                  className="eyeIcon"
-                  onClick={() => {
-                    setDisplayImageModal(true);
-                    setSelectedPost(user);
-                  }}
-                >
-                  <EyeIcon size={24} />
-                </div>
+        {userData.length > 0 ? (
+          userData?.map((user, index) => (
+            <tr key={index}>
+              <td>
+                {user.title.length > 30
+                  ? user.title.substring(0, 30) + "..."
+                  : user.title}
+              </td>
+              <td>{user.isPrivate ? "Privé" : "Public"}</td>
+              <td>
+                <div className="actionsContainer">
+                  <div
+                    className="eyeIcon"
+                    onClick={() => {
+                      setDisplayImageModal(true);
+                      setSelectedPost(user);
+                    }}
+                  >
+                    <EyeIcon size={24} />
+                  </div>
 
-                <div className="editIcon">
-                  <PencilIcon size={24} />
+                  <div
+                    className="deleteIcon"
+                    onClick={() => {
+                      setDeletePubModal(true);
+                      setSelectedPost(user);
+                    }}
+                  >
+                    <TrashIcon size={24} />
+                  </div>
                 </div>
-                <div
-                  className="deleteIcon"
-                  onClick={() => {
-                    setDeletePubModal(true);
-                    setSelectedPost(user);
-                  }}
-                >
-                  <TrashIcon size={24} />
-                </div>
-              </div>
-            </td>
+              </td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="4">No data</td>
           </tr>
-        ))}
+        )}
       </table>
       <DisplayModal
         showModal={displayImageModal}

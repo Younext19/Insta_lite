@@ -7,7 +7,6 @@ import CustomButton from "../../components/Button/CustomButton";
 const Home = () => {
   return (
     <div className="homeContainer">
-      <h1>Welcome Username</h1>
       <img src={illustration} className="illustrationImage" />
       <div className="centeredContent">
         <p className="title">Amstagram</p>

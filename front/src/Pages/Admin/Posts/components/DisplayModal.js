@@ -1,21 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./DisplayModal.css";
+import { getImagePost } from "../../../../api/posts";
 const DisplayModal = ({ showModal, closeModal, userData }) => {
+  const [IMG, setIMG] = useState("");
+
+  const token = localStorage.getItem("user-token");
+
+  useEffect(() => {
+    getImagePost(userData.originName, token).then((data) => {
+      setIMG(data);
+      if (data) {
+        handleData(data);
+      }
+      console.log("🚀 ~ file: DisplayModal.js:16 ~ ).then ~ data:", data);
+    });
+  }, [userData.originName]);
+  const handleData = (data) => {
+    const dataUrl = `data:image/png;base64,${data}`;
+    setIMG(dataUrl);
+  };
+  console.log("🚀 ~ file: DisplayModal.js:4 ~ DisplayModal ~ userData:", IMG);
   if (!showModal) {
     return null; // Don't render anything if the modal is not visible
   }
-
   return (
     <div className={`modal ${showModal ? "show" : ""}`} onClick={closeModal}>
       <div className="modal-content" onClick={(res) => res.stopPropagation()}>
         <div className="user-post">
-          <img
-            src={userData.imageUrl}
-            alt={`Post ${userData.id}`}
-            className="post-image"
-          />
+          <img src={IMG} alt={`Post ${userData.id}`} className="post-image" />
           <p className="dataTitle">{userData.title}</p>
-          <p>Total Likes: {userData.totalLikes}</p>
           <p>
             Ceci est un publication{userData?.isPrivate ? " privé" : " public"}
           </p>

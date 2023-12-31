@@ -1,80 +1,94 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import instagram from "../../../assets/instagram.png";
 import "./Feed.css";
+import { CommentIcon, HeartFillIcon, HeartIcon } from "@primer/octicons-react";
 
-import Post from "./Components/Post";
+import {
+  getImagePost,
+  getImagePostAnonyme,
+  getPosts,
+  getPostsAnonyme,
+} from "../../../api/posts";
 
 export default function Feed() {
-  const isConnected = true;
+  const token = localStorage.getItem("user-token");
+  const [dataa, setdataa] = useState(null);
+  useEffect(() => {
+    // Fetch data from API
+    if (token) {
+      getPosts(token).then((postData) => {
+        // Create an array to store modified data
+        const modifiedData = [];
 
-  const postData = [
-    {
-      pseudo: "Fouad",
-      imageUrl: instagram,
-      title: "this is a post title not same as insta",
-      totalLikes: 20,
-      liked: true,
-      comments: [
-        {
-          username: "ilyes",
-          content:
-            "this is a commentcommentcommentcommentcomment commentcommentcommentcommentcomment commentcommentcommentcommentcomme  fafa lorem ipsum dolor iset im just writing to jump a line and do it cool i love this bro",
-          userImg: instagram,
-        },
-        { username: "ilyes", content: "this is a comment", userImg: instagram },
-        { username: "ilyes", content: "this is a comment", userImg: instagram },
-        { username: "ilyes", content: "this is a comment", userImg: instagram },
-        { username: "ilyes", content: "this is a comment", userImg: instagram },
-        {
-          username: "sofiane",
-          content: "this is a comment",
-          userImg: instagram,
-        },
-        {
-          username: "younes",
-          content: "this is a comment",
-          userImg: instagram,
-        },
-      ],
-      isPrivate: true,
-    },
-    {
-      pseudo: "Fouad",
-      imageUrl: instagram,
-      title: "this is a post title not same as insta",
-      totalLikes: 20,
-      liked: false,
-      comments: [
-        {
-          username: "ilyes",
-          content:
-            "this is a commentcommentcommentcommentcomment commentcommentcommentcommentcomment commentcommentcommentcommentcomme  fafa lorem ipsum dolor iset im just writing to jump a line and do it cool i love this bro",
-          userImg: instagram,
-        },
-        { username: "ilyes", content: "this is a comment", userImg: instagram },
-        { username: "ilyes", content: "this is a comment", userImg: instagram },
-        { username: "ilyes", content: "this is a comment", userImg: instagram },
-        { username: "ilyes", content: "this is a comment", userImg: instagram },
-        {
-          username: "sofiane",
-          content: "this is a comment",
-          userImg: instagram,
-        },
-        {
-          username: "younes",
-          content: "this is a comment",
-          userImg: instagram,
-        },
-      ],
-      isPrivate: true,
-    },
-  ];
+        // Use Promise.all to wait for all getImagePost requests to complete
+        Promise.all(
+          postData.map((post) =>
+            getImagePost(post.originName, token).then((imageData) => {
+              // Modify the post object and push it to the array
+              modifiedData.push({ ...post, image: imageData });
+            })
+          )
+        ).then(() => {
+          // Set the state after all requests are completed
+          setdataa(modifiedData);
+        });
+      });
+    } else {
+      getPostsAnonyme().then((data) => {
+        console.log("🚀 ~ file: Posts.js:30 ~ getPosts ~ data:", data);
+        const modifiedData = [];
+
+        // Use Promise.all to wait for all getImagePost requests to complete
+        if (data) {
+          Promise.all(
+            data.map((post) =>
+              getImagePostAnonyme(post.originName).then((imageData) => {
+                console.log(
+                  "🚀 ~ file: Feed.js:45 ~ getImagePostAnonyme ~ imageData:",
+                  imageData
+                );
+                // Modify the post object and push it to the array
+                modifiedData.push({ ...post, image: imageData });
+              })
+            )
+          ).then(() => {
+            // Set the state after all requests are completed
+            setdataa(modifiedData);
+          });
+        }
+      });
+    }
+  }, []);
 
   return (
     <div className="feedContainer">
-      {postData.map((post, index) => (
-        <Post post={post} isConnected={isConnected} />
-      ))}
+      {dataa?.map((res) => {
+        const dataUrl = `data:image/png;base64,${res.image}`;
+
+        console.log(res);
+        return (
+          <div className="post" key={res.originName}>
+            <div className="postHeader">
+              <div className="postHeaderLeft">
+                <img src={instagram} alt="user" className="circleUserImage" />
+                <p className="userName">{res.fullnameUser}</p>
+              </div>
+            </div>
+            <div className="imageContainer">
+              <img src={dataUrl} alt="postimage" className="imagePostDisplay" />
+            </div>
+            <div className="separator" />
+            <div className="actionsContainer">
+              <a className="comment-button" href="#comment">
+                <CommentIcon size={24} />
+              </a>
+            </div>
+            <div className="commentBtn">
+              <i className="far fa-comment"></i>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

@@ -28,3 +28,43 @@ export const deleteUser = async (token, id) => {
     console.error(error);
   }
 };
+
+export const addUser = async (token, data) => {
+  try {
+    const response = await axios.post(`${apiUrl}users/addUser`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const editUser = async (token, data, id) => {
+  try {
+    const response = await axios.put(`${apiUrl}users/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// patch user
+export const patchUser = async (token, data, id) => {
+  try {
+    const response = await axios.patch(`${apiUrl}users/update/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};

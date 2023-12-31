@@ -1,7 +1,6 @@
 // App.js
-
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { useRoutes } from "react-router-dom";
 import Home from "./Pages/Home/Home";
 import SideBar from "./components/SideBar/SideBar";
 import "./App.css";
@@ -12,25 +11,58 @@ import Posts from "./Pages/Admin/Posts/Posts";
 import Login from "./Pages/Auth/Login/Login";
 import Signup from "./Pages/Auth/Signup/Signup";
 import Error from "./Pages/ErrorPage/Error";
+import {
+  HOME,
+  FEED,
+  PROFILE,
+  USERS,
+  POSTS,
+  LOGIN,
+  SIGNUP,
+} from './utils/routes';
+import PrivateRoute from "./components/Route/PrivateRoute";
+
 const App = () => {
-  const userRole = "admin";
+  const routes = useRoutes([
+    {
+      path: '*',
+      element: <Error />,
+    },
+    {
+      path: HOME,
+      element: <Home />,
+    },
+    {
+      path: FEED,
+      element: <Feed />,
+    },
+    {
+      path: PROFILE,
+      element: <PrivateRoute element={<Profile />} route={PROFILE} />,
+    },
+    {
+      path: USERS,
+      element: <PrivateRoute element={<Users />} route={USERS} />,
+    },
+    {
+      path: POSTS,
+      element: <PrivateRoute element={<Posts />} route={POSTS} />,
+    },
+    {
+      path: LOGIN,
+      element: <PrivateRoute element={<Login />} route={LOGIN} />,
+    },
+    {
+      path: SIGNUP,
+      element: <PrivateRoute element={<Signup />} route={SIGNUP} />,
+    },
+  ])
 
   return (
-    // App.js
-
     <div className="app-container">
-      <SideBar userRole={userRole} />
+      <SideBar />
       <div className="contentContainer">
-        <Routes>
-          <Route element={<Error />} path="*" />
-          <Route element={<Home />} path="/home" />
-          <Route element={<Feed />} path="/feed" />
-          <Route element={<Profile />} path="/profile" />
-          <Route element={<Users />} path="/users" />
-          <Route element={<Posts />} path="/posts" />
-          <Route element={<Login />} path="/login" />
-          <Route element={<Signup />} path="/signup" />
-        </Routes>
+        {routes}
       </div>
     </div>
   );

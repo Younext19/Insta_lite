@@ -3,12 +3,14 @@ import "./AddUserModal.css"; // Import your custom CSS for styling
 import CustomButton from "../../../../components/Button/CustomButton";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { addUser } from "../../../../api/users";
 
 const UserSchema = Yup.object().shape({
   fullName: Yup.string().required("Full Name is required"),
   email: Yup.string().required("Invalid email").required("Email is required"),
   pseudo: Yup.string().required("Password is required"),
   role: Yup.string().required("Role is required"),
+  password: Yup.string().required("Password is required"),
 });
 
 const AddUserModal = ({ showModal, handleClose }) => {
@@ -17,7 +19,8 @@ const AddUserModal = ({ showModal, handleClose }) => {
       fullName: "",
       email: "",
       pseudo: "",
-      role: "utilisateur",
+      role: "ROLE_UTILISATEUR",
+      password: "",
     },
     validationSchema: UserSchema,
     onSubmit: async (values, { resetForm }) => {
@@ -36,6 +39,19 @@ const AddUserModal = ({ showModal, handleClose }) => {
   if (!showModal) {
     return null; // Don't render anything if the modal is not visible
   }
+  const addUsr = () => {
+    const token = localStorage.getItem("user-token");
+
+    const data = {
+      fullname: formik.values.fullName,
+      mail: formik.values.email,
+      pseudo: formik.values.pseudo,
+      role: formik.values.role,
+      password: formik.values.password,
+      hasPrivileges: formik.values.hasPrivileges,
+    };
+    addUser(token, data);
+  };
 
   return (
     <div className={`modal ${showModal ? "show" : ""}`} onClick={handleClose}>
@@ -74,6 +90,16 @@ const AddUserModal = ({ showModal, handleClose }) => {
             id="email"
             required
           />
+          <label htmlFor="password">Mot de passe:</label>
+          <input
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            name="password"
+            onBlur={formik.handleBlur}
+            type="text"
+            id="password"
+            required
+          />
 
           <label htmlFor="role">Role:</label>
           <select
@@ -84,14 +110,25 @@ const AddUserModal = ({ showModal, handleClose }) => {
             onBlur={formik.handleBlur}
             required
           >
-            <option value="utilisateur">Utilisateur Normal</option>
-            <option value="administrateur">Administrateur</option>
-            <option value="utilisateur_privilege">
-              Utilisateur avec Privilège
-            </option>
+            <option value="ROLE_UTILISATEUR">Utilisateur Normal</option>
+            <option value="ROLE_ADMINISTRATEUR">Administrateur</option>
           </select>
+          {/** Has priviliege cehckbox */}
+          <div className="hasPrivileges">
+            <label htmlFor="hasPrivileges">
+              Un utilisateur avec des privilege
+            </label>
+            <input
+              type="checkbox"
+              id="hasPrivileges"
+              name="hasPrivileges"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.hasPriviliege}
+            />
+          </div>
 
-          <CustomButton text={"Ajouter"} type="submit" />
+          <CustomButton text={"Ajouter"} onClick={addUsr} />
         </form>
       </div>
     </div>

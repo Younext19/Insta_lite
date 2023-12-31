@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useAtom } from "jotai";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "./Login.css";
 import instaLogo from "../../../assets/instagram.png";
 import mail from "../../../assets/mail.png";
 import pw from "../../../assets/password.png";
-import user from "../../../assets/user.png";
 import CustomButton from "../../../components/Button/CustomButton";
 import { login } from "../../../api/auth";
+import { userAtom } from "../../../services/userService";
+import { useNavigate } from "react-router-dom";
+import { HOME } from "../../../utils/routes";
 
 const LoginSchema = Yup.object().shape({
   mail: Yup.string().email("Invalid email").required("Email is required"),
@@ -15,6 +18,10 @@ const LoginSchema = Yup.object().shape({
 });
 
 export default function Login() {
+  const [, setUser] = useAtom(userAtom);
+
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       mail: "",
@@ -31,14 +38,17 @@ export default function Login() {
     };
     login(loginData)
       .then((res) => {
-        console.log(res);
         // save token to local storage
-        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("user-token", res.data.access_token);
+        localStorage.setItem("user-role", res.data.role);
+        setUser(res.data);
+        navigate(HOME);
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
   return (
     <div className="container">
       <div className="boxForm">

@@ -1,3 +1,7 @@
+.users-table {
+  margin-top: 20px;
+}
+
 .userContent {
   display: flex;
   flex-direction: column;

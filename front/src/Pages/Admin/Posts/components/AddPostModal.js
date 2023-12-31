@@ -5,13 +5,16 @@ import "./AddPostModal.css"; // Import the CSS file
 import CustomButton from "../../../../components/Button/CustomButton";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { addPost } from "../../../../api/posts";
 
 const LoginSchema = Yup.object().shape({
   file: Yup.string().required("Full Name is required"),
   titre: Yup.string().required("Invalid email").required("Email is required"),
   private: Yup.boolean(),
 });
-const AddPostModal = ({ showModal, closeModal, handleAddPost }) => {
+const AddPostModal = ({ showModal, closeModal }) => {
+  const [file, setFiles] = useState(null);
+  const token = localStorage.getItem("user-token");
   const formik = useFormik({
     initialValues: {
       file: "",
@@ -19,23 +22,23 @@ const AddPostModal = ({ showModal, closeModal, handleAddPost }) => {
       private: false,
     },
     validationSchema: LoginSchema,
-    onSubmit: async (values, { resetForm }) => {
-      console.log("Form submitted:", values);
-      // Add your login logic here
-
-      // Assuming some asynchronous logic is being performed (e.g., API request)
-      // await yourAsyncSubmitFunction(values);
-
-      // Reset the form to its initial values
-      resetForm();
-      closeModal();
-    },
   });
 
   if (!showModal) {
     return null; // Don't render anything if the modal is not visible
   }
 
+  const addPostevent = () => {
+    const formData = new FormData();
+    formData.append("image", formik.values.file);
+    formData.append("title", formik.values.titre);
+    formData.append("isPrivate", formik.values.private);
+
+    addPost(token, formData).then((res) => {
+      console.log("🚀 ~ file: AddPostModal.js:66 ~ addPost ~ res", res);
+      closeModal();
+    });
+  };
   return (
     <div className={`modal ${showModal ? "show" : ""}`} onClick={closeModal}>
       <div
@@ -51,9 +54,11 @@ const AddPostModal = ({ showModal, closeModal, handleAddPost }) => {
               <input
                 type="file"
                 accept="image/*"
-                onChange={formik.handleChange}
+                onChange={(event) => {
+                  formik.setFieldValue("file", event.target.files[0].name);
+                  setFiles(event.target.files[0]);
+                }}
                 name="file"
-                onBlur={formik.handleBlur}
                 id="file"
                 required
               />
@@ -89,7 +94,7 @@ const AddPostModal = ({ showModal, closeModal, handleAddPost }) => {
         </div>
         <CustomButton
           text={"Add Post"}
-          onClick={formik.handleSubmit}
+          onClick={addPostevent}
           type={"submit"}
         />
       </div>
