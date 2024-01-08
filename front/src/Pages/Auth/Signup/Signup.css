@@ -93,3 +93,11 @@
   cursor: pointer;
   text-align: center;
 }
+
+.errorText {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+  text-align: center;
+  font-weight: bold;
+}

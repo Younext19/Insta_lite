@@ -5,20 +5,30 @@ import "./Home.css";
 import illustration from "../../assets/illustration.png";
 import CustomButton from "../../components/Button/CustomButton";
 import { Navigate } from "react-router-dom";
-import { HOME } from "../../utils/routes";
+import { LOGIN } from "../../utils/routes";
 
 const Home = () => {
+  function redirectToLogin() {
+    Navigate(LOGIN);
+  }
+  const token = localStorage.getItem("user-token");
+
   return (
     <div className="homeContainer">
       <img src={illustration} className="illustrationImage" />
       <div className="centeredContent">
         <p className="title">Amstagram</p>
         <p className="description">
-          your new photo-sharing hub! Capture and share life's moments
-          effortlessly. Explore a vibrant feed, connect with friends, and
-          express yourself with likes and comments.
+          Votre nouvelle plateforme de partage de photos ! Capturez et partagez
+          les moments de la vie sans effort. Explorez un fil dynamique,
+          connectez-vous avec des amis et exprimez-vous avec des likes et des
+          commentaires.
         </p>
-        <CustomButton text={"Get Started"} onClick={() => Navigate(HOME)} />
+        {!token && (
+          <a className="alreadyHaveAnAccount" onClick={() => {}} href="login">
+            Commencer !
+          </a>
+        )}
       </div>
       {/* Add your content here */}
     </div>

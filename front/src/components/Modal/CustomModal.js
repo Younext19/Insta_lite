@@ -1,14 +1,19 @@
 import React from "react";
 import Modal from "react-modal";
 
-export default function CustomModal({ isOpen, onRequestClose, children }) {
+export default function CustomModal({
+  isOpen,
+  onRequestClose,
+  children,
+  ovf = "hidden",
+}) {
   const customStyles = {
     content: {
       width: "50%",
       height: "420px",
       margin: "auto",
       borderRadius: "8px",
-      overflow: "hidden", // optional, to hide content overflowing the modal
+      overflow: ovf,
     },
     overlay: {
       backgroundColor: "rgba(0, 0, 0, 0.5)",

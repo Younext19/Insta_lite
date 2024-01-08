@@ -61,7 +61,7 @@ export default function Posts() {
                   ? user.title.substring(0, 30) + "..."
                   : user.title}
               </td>
-              <td>{user.isPrivate ? "Privé" : "Public"}</td>
+              <td>{user.private ? "Privé" : "Public"}</td>
               <td>
                 <div className="actionsContainer">
                   <div

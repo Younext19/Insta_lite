@@ -51,7 +51,9 @@ const EditUserModal = ({ showModal, handleClose, userData }) => {
       role: formik.values.role,
       hasPrivileges: formik.values.hasPrivileges,
     };
-    patchUser(token, data, userData.id);
+    patchUser(token, data, userData.id).then((res) => {
+      window.location.reload();
+    });
   };
 
   return (

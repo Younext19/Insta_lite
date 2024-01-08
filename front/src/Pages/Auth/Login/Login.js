@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAtom } from "jotai";
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -19,7 +19,7 @@ const LoginSchema = Yup.object().shape({
 
 export default function Login() {
   const [, setUser] = useAtom(userAtom);
-
+  const [pwvis, setpwvis] = useState(false);
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -32,7 +32,7 @@ export default function Login() {
 
   const onSubmit = () => {
     const loginData = {
-      username: formik.values.mail,
+      username: formik.values.mail.toLocaleLowerCase(),
       password: formik.values.password,
     };
     login(loginData)
@@ -43,7 +43,9 @@ export default function Login() {
         setUser(res.data);
         navigate(HOME);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        alert("Échec de connexion !");
+      });
   };
 
   return (
@@ -51,7 +53,7 @@ export default function Login() {
       <div className="boxForm">
         <div className="signupHeader">
           <img src={instaLogo} alt="instaLogo" className="instaLogo" />
-          <p className="instaTitle">Instagram</p>
+          <p className="instaTitle">Amstagram</p>
         </div>
         <div className="mailInputWithIcon">
           <input
@@ -69,25 +71,32 @@ export default function Login() {
           <input
             value={formik.values.password}
             className="passwordInput"
-            type="password"
+            type={pwvis ? "text" : "password"}
             placeholder="Mot de passe"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             name="password"
           />
-          <img src={pw} alt="password" className="passwordIcon" />
+          <a
+            href="#"
+            onClick={() => {
+              setpwvis(!pwvis);
+            }}
+          >
+            <img src={pw} alt="password" className="passwordIcon" />
+          </a>{" "}
         </div>
 
         <CustomButton
-          text={"Login"}
+          text={"Se connecter"}
           onClick={onSubmit}
           personnalisedWidth={"50%"}
           personnalisedMarginTop={"20px"}
-          type={"submit"}
+          type="submit"
         />
 
         <a className="createAccount" href="signup">
-          Create a new account
+          Créer un compte
         </a>
       </div>
     </div>

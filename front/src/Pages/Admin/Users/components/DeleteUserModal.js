@@ -15,7 +15,14 @@ const DeleteUserModal = ({ showModal, closeModal, handleDelete, userName }) => {
       >
         <p>Etes vous sur de vouloir supprimer {userName}</p>
         <div className="button-container">
-          <CustomButton text={"Oui"} onClick={handleDelete} type={"submit"} />
+          <CustomButton
+            text={"Oui"}
+            onClick={() => {
+              handleDelete();
+              window.location.reload();
+            }}
+            type={"submit"}
+          />
           <CustomButton text={"Non"} onClick={closeModal} />
         </div>
       </div>

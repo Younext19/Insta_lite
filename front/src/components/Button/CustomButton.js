@@ -23,7 +23,7 @@ const CustomButton = ({
   };
 
   return (
-    <button style={buttonStyle} onClick={onClick} type={type}>
+    <button style={buttonStyle} onClick={onClick} type="submit">
       {text}
     </button>
   );

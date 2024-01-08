@@ -28,9 +28,23 @@ const AddPostModal = ({ showModal, closeModal }) => {
     return null; // Don't render anything if the modal is not visible
   }
 
+  const validateFileSize = () => {
+    // Check if a file is selected
+    if (file) {
+      // Check the file size (in bytes)
+      const maxSizeInBytes = 1048576; // 1 MB
+      if (file.size > maxSizeInBytes) {
+        setFiles(null);
+        alert("File size is too large. Please pick a smaller file.");
+      } else {
+        setFiles(file);
+      }
+    }
+  };
   const addPostevent = () => {
+    validateFileSize();
     const formData = new FormData();
-    formData.append("image", formik.values.file);
+    formData.append("image", file);
     formData.append("title", formik.values.titre);
     formData.append("isPrivate", formik.values.private);
 
@@ -92,8 +106,11 @@ const AddPostModal = ({ showModal, closeModal }) => {
           </label>
         </div>
         <CustomButton
-          text={"Add Post"}
-          onClick={addPostevent}
+          text={"Ajouter une publication"}
+          onClick={() => {
+            window.location.reload();
+            addPostevent();
+          }}
           type={"submit"}
         />
       </div>

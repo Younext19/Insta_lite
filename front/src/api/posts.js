@@ -73,6 +73,8 @@ export const addPost = async (token, formData) => {
     const response = await axios.post(`${apiUrl}images/upload`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
+        // form data
+        "Content-Type": "multipart/form-data",
       },
     });
     return response.data;

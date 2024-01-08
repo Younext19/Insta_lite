@@ -13,10 +13,16 @@ const SignupSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
   fullName: Yup.string().required("Full Name is required"),
   username: Yup.string().required("Username is required"),
-  password: Yup.string().required("Password is required"),
+  password: Yup.string()
+    .required("Mot de passe est requis")
+    .min(8, "Mot de passe doit contenir au moins 8 caractères")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+      "Mot de passe doit contenir au moins une lettre majuscule, une lettre minuscule et un chiffre"
+    ),
   verifyPassword: Yup.string()
-    .oneOf([Yup.ref("password"), null], "Passwords must match")
-    .required("Please confirm your password"),
+    .oneOf([Yup.ref("password"), null], "Mot de pase ne correspond pas")
+    .required("Confirmation du mot de passe est requis"),
 });
 
 export default function Signup() {
@@ -65,7 +71,7 @@ export default function Signup() {
       <div className="boxForm">
         <div className="signupHeader">
           <img src={instaLogo} alt="instaLogo" className="instaLogo" />
-          <p className="instaTitle">Instagram</p>
+          <p className="instaTitle">Amstagram</p>
         </div>
 
         <div className="username">
@@ -141,7 +147,9 @@ export default function Signup() {
             }}
           />
         </div>
-
+        {formik.errors.password && formik.touched.password && (
+          <div className="errorText">{formik.errors.password}</div>
+        )}
         <a className="submitButton" onClick={onSubmit}>
           Créer un compte
         </a>
