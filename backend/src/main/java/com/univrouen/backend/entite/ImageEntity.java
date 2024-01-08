@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 
 @Builder
@@ -32,6 +34,9 @@ public class ImageEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserDto user;
+
+    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Commentaire> commentaires;
 
 
 
