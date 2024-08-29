@@ -1,0 +1,63 @@
+/* AddPostModal.css */
+
+/* Add this to your existing CSS file or create a new one */
+
+.add-post-modal {
+  text-align: center;
+}
+
+.input-group {
+  margin-top: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  color: #333; /* Set label text color */
+}
+
+/* Style the checkbox */
+input[type="checkbox"] {
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
+/* Style the file input */
+input[type="file"] {
+  display: none; /* Hide the default file input */
+}
+
+/* Style a custom file input button */
+.custom-file-input {
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: #007bff; /* Set button background color */
+  color: #fff; /* Set button text color */
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  transition: background-color 0.3s;
+}
+
+/* Style the file input label */
+.custom-file-label {
+  margin-left: 5px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Change button color on hover */
+.custom-file-input:hover {
+  background-color: #0056b3; /* Set button background color on hover */
+}
+.titleInput {
+  width: 40%;
+  height: 35px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 5px;
+  outline: none;
+}

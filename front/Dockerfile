@@ -1,5 +1,5 @@
 # pull official base image
-FROM node:18.16.0
+FROM node:18.16.0-alpine AS node
 
 # set working directory
 WORKDIR /front/
@@ -9,16 +9,14 @@ ENV PATH /app/node_modules/.bin:$PATH
 
 # install app dependencies
 COPY package.json ./
-COPY package-lock.json ./
 
-RUN yarn
-
+RUN npm install && npm react-scripts
 # add app
 COPY . ./
 
 #ENV
 ENV NODE_ENV production
 # PORT
-EXPOSE 9999
+EXPOSE 3000
 # start app
-CMD ["yarn", "start"]
+CMD ["npm", "start"]

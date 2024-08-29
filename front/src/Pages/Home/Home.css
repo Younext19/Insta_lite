@@ -1,0 +1,30 @@
+.homeContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding-left: 20px;
+  align-items: center;
+  width: 100%;
+}
+.illustrationImage {
+  width: 500px;
+  height: 500px;
+}
+
+.centeredContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.title {
+  font-size: 50px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+.description {
+  font-size: 20px;
+  margin-bottom: 20px;
+  width: 50%;
+  text-align: center;
+}

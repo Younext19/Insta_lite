@@ -1,0 +1,42 @@
+/* ErrorPage.css */
+
+/* Add this to your existing CSS file or create a new one */
+
+.error-container {
+  text-align: center;
+  padding: 50px;
+}
+
+.error-image {
+  max-width: 500px;
+  height: auto;
+}
+
+.error-text {
+  font-size: 2rem;
+  margin: 20px 0;
+}
+
+.error-description {
+  font-size: 1.2rem;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.error-button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1rem;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-weight: bold;
+  margin-top: 30px;
+}
+
+.error-button:hover {
+  background-color: #0056b3;
+}

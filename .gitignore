@@ -56,3 +56,4 @@ build/
 
 ### VS Code ###
 back/.vscode/
+docker-compose.yml

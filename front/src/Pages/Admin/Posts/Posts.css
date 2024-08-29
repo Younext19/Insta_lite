@@ -1,0 +1,146 @@
+.users-table {
+  margin-top: 20px;
+}
+
+.userContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+.tableTitle {
+  font-size: 22px;
+  font-weight: bold;
+}
+.tableInfo {
+  margin-left: 20px;
+  margin-top: 20px;
+}
+
+.tableDescription {
+  font-size: 20px;
+}
+.tableHeader {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+}
+.searchInput {
+  height: 40px;
+  border-radius: 8px;
+  padding: 8px;
+  border-color: black;
+  border-width: 1px;
+  width: 300px;
+}
+
+.users-table {
+  width: 80%; /* Adjust as needed */
+  border-collapse: collapse;
+}
+
+.users-table th,
+.users-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.users-table th {
+  background-color: #f2f2f2;
+}
+.actionsContainer {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  flex-direction: row;
+}
+.eyeIcon {
+  width: 40px;
+  height: 40px;
+  background-color: #34ec7e;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  color: white;
+}
+.editIcon {
+  width: 40px;
+  height: 40px;
+  background-color: #3498db;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  color: white;
+  margin-left: 16px;
+}
+.deleteIcon {
+  width: 40px;
+  height: 40px;
+  background-color: #f72b50;
+  cursor: pointer;
+  display: flex;
+  margin-left: 16px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  color: white;
+}
+.divider {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.imagePostModaDisplay {
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+  border-width: 1px;
+  border-color: black;
+  border-style: solid;
+  margin-top: 10px;
+}
+.leftSide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 50%;
+  height: 100%;
+}
+.rightSide {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  height: 100%;
+}
+._existing-comments {
+  overflow-y: scroll;
+  max-height: 200px;
+  overflow-x: hidden;
+  background-color: #f2f2f2;
+  padding: 8px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.comment-content {
+}
+
+.titleText {
+  font-size: 20px;
+  font-weight: bold;
+}
+.footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16px;
+  width: 100%;
+}
